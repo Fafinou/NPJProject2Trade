@@ -48,9 +48,9 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
-                      <Component id="sellButton" min="-2" pref="88" max="-2" attributes="0"/>
+                      <Component id="btnSell" min="-2" pref="88" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
-                      <Component id="homeButton" min="-2" pref="83" max="-2" attributes="0"/>
+                      <Component id="btnChange" min="-2" pref="83" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="41" max="32767" attributes="0"/>
@@ -72,8 +72,8 @@
               </Group>
               <EmptySpace pref="47" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="sellButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="homeButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnSell" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnChange" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
           </Group>
@@ -91,12 +91,12 @@
         <Property name="text" type="java.lang.String" value="Price :"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="sellButton">
+    <Component class="javax.swing.JButton" name="btnSell">
       <Properties>
         <Property name="text" type="java.lang.String" value="Sell"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sellButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSellActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="nameTextField">
@@ -109,12 +109,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="priceTextFieldActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="homeButton">
+    <Component class="javax.swing.JButton" name="btnChange">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Home"/>
+        <Property name="text" type="java.lang.String" value="Cancel"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="homeButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnChangeActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

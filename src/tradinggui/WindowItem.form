@@ -78,7 +78,7 @@
                               </Group>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Component id="buyButton1" min="-2" pref="76" max="-2" attributes="0"/>
+                              <Component id="btnBuy" min="-2" pref="76" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
                               <Component id="btnCancel" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -107,7 +107,7 @@
               </Group>
               <EmptySpace pref="76" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="buyButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnBuy" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnCancel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
@@ -116,12 +116,12 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JButton" name="buyButton1">
+    <Component class="javax.swing.JButton" name="btnBuy">
       <Properties>
         <Property name="text" type="java.lang.String" value="Buy"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buyButton1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuyActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="itemName1">

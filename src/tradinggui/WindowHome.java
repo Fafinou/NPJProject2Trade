@@ -41,33 +41,33 @@ public class WindowHome extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        sellButton = new javax.swing.JButton();
-        buyButton = new javax.swing.JButton();
-        unregisterButton = new javax.swing.JButton();
+        btnSell = new javax.swing.JButton();
+        btnBuy = new javax.swing.JButton();
+        btnUnregister = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         accountLabel = new javax.swing.JLabel();
         btnFollow = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        sellButton.setText("Sell an item");
-        sellButton.addActionListener(new java.awt.event.ActionListener() {
+        btnSell.setText("Sell an item");
+        btnSell.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sellButtonActionPerformed(evt);
+                btnSellActionPerformed(evt);
             }
         });
 
-        buyButton.setText("Buy an item");
-        buyButton.addActionListener(new java.awt.event.ActionListener() {
+        btnBuy.setText("Buy an item");
+        btnBuy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buyButtonActionPerformed(evt);
+                btnBuyActionPerformed(evt);
             }
         });
 
-        unregisterButton.setText("Unregister");
-        unregisterButton.addActionListener(new java.awt.event.ActionListener() {
+        btnUnregister.setText("Unregister");
+        btnUnregister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                unregisterButtonActionPerformed(evt);
+                btnUnregisterActionPerformed(evt);
             }
         });
 
@@ -88,10 +88,10 @@ public class WindowHome extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(buyButton)
+                    .addComponent(btnBuy)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(sellButton)
+                            .addComponent(btnSell)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
@@ -102,7 +102,7 @@ public class WindowHome extends javax.swing.JFrame {
                                         .addComponent(accountLabel)))
                                 .addGap(79, 79, 79)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(unregisterButton)
+                                    .addComponent(btnUnregister)
                                     .addComponent(btnFollow))))
                         .addGap(5, 5, 5)))
                 .addContainerGap(29, Short.MAX_VALUE))
@@ -113,11 +113,11 @@ public class WindowHome extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(buyButton)
+                        .addComponent(btnBuy)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(sellButton)
+                        .addComponent(btnSell)
                         .addGap(12, 12, 12)
-                        .addComponent(unregisterButton))
+                        .addComponent(btnUnregister))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(52, 52, 52)
                         .addComponent(jLabel4)
@@ -131,25 +131,25 @@ public class WindowHome extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void sellButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellButtonActionPerformed
+    private void btnSellActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSellActionPerformed
         // TODO add your handling code here:
         WindowSell nextWindow = new WindowSell(bank, server, client);
         this.setVisible(false);
         nextWindow.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_sellButtonActionPerformed
+    }//GEN-LAST:event_btnSellActionPerformed
 
-    private void buyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyButtonActionPerformed
+    private void btnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyActionPerformed
         // TODO add your handling code here:
         WindowListItem nextWindow = new WindowListItem(bank, server, client);
         this.setVisible(false);
         nextWindow.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_buyButtonActionPerformed
+    }//GEN-LAST:event_btnBuyActionPerformed
 
-    private void unregisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unregisterButtonActionPerformed
+    private void btnUnregisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnregisterActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_unregisterButtonActionPerformed
+    }//GEN-LAST:event_btnUnregisterActionPerformed
 
     private void btnFollowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFollowActionPerformed
         // TODO add your handling code here:
@@ -160,9 +160,9 @@ public class WindowHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFollowActionPerformed
 
      private void buttonSetVisible(Boolean visible) {
-        buyButton.setVisible(visible);
-        sellButton.setVisible(visible);
-        unregisterButton.setVisible(visible); 
+        btnBuy.setVisible(visible);
+        btnSell.setVisible(visible);
+        btnUnregister.setVisible(visible); 
     }
      
     /**
@@ -201,10 +201,10 @@ public class WindowHome extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel accountLabel;
+    private javax.swing.JButton btnBuy;
     private javax.swing.JButton btnFollow;
-    private javax.swing.JButton buyButton;
+    private javax.swing.JButton btnSell;
+    private javax.swing.JButton btnUnregister;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JButton sellButton;
-    private javax.swing.JButton unregisterButton;
     // End of variables declaration//GEN-END:variables
 }

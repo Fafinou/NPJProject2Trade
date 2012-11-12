@@ -5,6 +5,7 @@
 package tradinggui;
 
 import tradingpf.Item;
+import tradingpf.TraderImpl;
 /**
  *
  * @author zoe
@@ -13,22 +14,27 @@ public class WindowItem extends javax.swing.JFrame {
 
     private String bank;
     private String server;
+    private TraderImpl client;
+    private Item item;
 
     
     
     public WindowItem() {
         initComponents();
     }
+
+    public WindowItem(String bank, String server, TraderImpl client, Item item) {
+        initComponents();
+        this.bank = bank;
+        this.server = server;
+        this.client = client;
+        this.item = item;
+    }
     
     
     /**
      * Creates new form WindowItem
      */
-    public WindowItem(Item item) {
-        initComponents();
-        itemName.setText(item.getName()); 
-        itemPrice.setText(Integer.toString(item.getPrice()));  
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -45,7 +51,7 @@ public class WindowItem extends javax.swing.JFrame {
         itemName = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         itemPrice = new javax.swing.JLabel();
-        buyButton1 = new javax.swing.JButton();
+        btnBuy = new javax.swing.JButton();
         itemName1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         itemPrice1 = new javax.swing.JLabel();
@@ -77,10 +83,10 @@ public class WindowItem extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        buyButton1.setText("Buy");
-        buyButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnBuy.setText("Buy");
+        btnBuy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buyButton1ActionPerformed(evt);
+                btnBuyActionPerformed(evt);
             }
         });
 
@@ -120,7 +126,7 @@ public class WindowItem extends javax.swing.JFrame {
                                     .addComponent(itemPrice1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(itemName1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(buyButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnBuy, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(62, 62, 62)
                                 .addComponent(btnCancel))))
                     .addComponent(jLabel5))
@@ -141,7 +147,7 @@ public class WindowItem extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buyButton1)
+                    .addComponent(btnBuy)
                     .addComponent(btnCancel))
                 .addGap(43, 43, 43))
         );
@@ -155,17 +161,23 @@ public class WindowItem extends javax.swing.JFrame {
     }//GEN-LAST:event_followButtonActionPerformed
 
     private void buyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyButtonActionPerformed
-        // TODO add your handling code here:
-        throw new UnsupportedOperationException("Not supported yet.");
+        // TODO add your handling code here:   
     }//GEN-LAST:event_buyButtonActionPerformed
 
-    private void buyButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyButton1ActionPerformed
+    private void btnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyActionPerformed
         // TODO add your handling code here:
-        throw new UnsupportedOperationException("Not supported yet.");
-    }//GEN-LAST:event_buyButton1ActionPerformed
+        WindowHome nextWindow = new WindowHome(bank, server, client);
+        nextWindow.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnBuyActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
+        WindowHome nextWindow = new WindowHome(bank, server, client);
+        nextWindow.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
@@ -204,9 +216,9 @@ public class WindowItem extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuy;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton buyButton;
-    private javax.swing.JButton buyButton1;
     private javax.swing.JButton followButton;
     private javax.swing.JLabel itemName;
     private javax.swing.JLabel itemName1;
