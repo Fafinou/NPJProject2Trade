@@ -4,17 +4,29 @@
  */
 package tradinggui;
 
+import tradingpf.TraderImpl;
+
 /**
  *
  * @author zoe
  */
 public class WindowSell extends javax.swing.JFrame {
 
+    private String bank;
+    private String server;
+    private TraderImpl client;
+
     /**
      * Creates new form WindowSell
      */
     public WindowSell() {
         initComponents();
+    }
+
+    public WindowSell(String bank, String server, TraderImpl client) {
+        this.bank = bank;
+        this.server = server;
+        this.client = client;
     }
 
     /**
@@ -118,7 +130,11 @@ public class WindowSell extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void sellButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellButtonActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here::
+        this.setVisible(false);
+        WindowHome nextWindow = new WindowHome(bank, server, client);
+        nextWindow.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_sellButtonActionPerformed
 
     private void nameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTextFieldActionPerformed
@@ -136,8 +152,9 @@ public class WindowSell extends javax.swing.JFrame {
     private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
         // TODO add your handling code here:
         this.setVisible(false);
-        WindowHome window = new WindowHome(true);
-        window.setVisible(true);
+        WindowHome nextWindow = new WindowHome(bank, server, client);
+        nextWindow.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_homeButtonActionPerformed
 
     /**

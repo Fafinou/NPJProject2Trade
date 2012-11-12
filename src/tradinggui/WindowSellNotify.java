@@ -10,6 +10,9 @@ package tradinggui;
  */
 public class WindowSellNotify extends javax.swing.JFrame {
 
+    private String bank;
+    private String server;
+
     /**
      * Creates new form WindowSellNotify
      */

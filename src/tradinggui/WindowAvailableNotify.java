@@ -10,6 +10,9 @@ package tradinggui;
  */
 public class WindowAvailableNotify extends javax.swing.JFrame {
 
+    private String bank;
+    private String server;
+
     /**
      * Creates new form WindowAvailableNotify
      */

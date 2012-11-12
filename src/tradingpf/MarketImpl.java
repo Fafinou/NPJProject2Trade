@@ -14,12 +14,12 @@ import se.kth.id2212.bankrmi.RejectedException;
  *
  * @author fingolfin
  */
-public class ServerImpl implements ServerItf {
+public class MarketImpl implements MarketItf {
     
     private Account bankAccount;
     private Bank bank;
     private String bankName;
-    private Map<String, ClientItf> registeredClients;
+    private Map<String, TraderItf> registeredClients;
     private Map<String, Item> itemList;
 
     @Override

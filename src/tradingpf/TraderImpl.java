@@ -12,16 +12,16 @@ import se.kth.id2212.bankrmi.Bank;
  *
  * @author fingolfin
  */
-public class ClientImpl implements ClientItf{
+public class TraderImpl implements TraderItf{
 
     private String clientName;
     private Account bankAccount;
     private Bank bankServer;
     private String bankName;
     private String tradePfName;
-    private ServerItf tradePfServer;
+    private MarketItf tradePfServer;
 
-    public ClientImpl(String clientName, String bankName, String tradePfName) {
+    public TraderImpl(String clientName, String bankName, String tradePfName) {
         this.clientName = clientName;
         this.bankName = bankName;
         this.tradePfName = tradePfName;

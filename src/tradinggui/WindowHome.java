@@ -4,11 +4,17 @@
  */
 package tradinggui;
 
+import tradingpf.TraderImpl;
+
 /**
  *
  * @author zoe
  */
 public class WindowHome extends javax.swing.JFrame {
+
+    private String bank;
+    private String server;
+    private TraderImpl client;
 
     /**
      * Creates new form WindowHome
@@ -17,12 +23,13 @@ public class WindowHome extends javax.swing.JFrame {
         initComponents();
         buttonSetVisible(false);
     }
-    
-    public WindowHome(Boolean connected) {
-        initComponents();
-        connectButton.setVisible(false);
-        buttonSetVisible(true);
+
+    public WindowHome(String bank, String server, TraderImpl client) {
+        this.bank = bank;
+        this.server = server;
+        this.client = client;
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,43 +40,19 @@ public class WindowHome extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        registerButton = new javax.swing.JButton();
         sellButton = new javax.swing.JButton();
-        portTextField = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        connectButton = new javax.swing.JButton();
         buyButton = new javax.swing.JButton();
         unregisterButton = new javax.swing.JButton();
-        ipAddressTextField = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        nameTextField = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         accountLabel = new javax.swing.JLabel();
+        btnFollow = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        registerButton.setText("Register");
-        registerButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                registerButtonActionPerformed(evt);
-            }
-        });
 
         sellButton.setText("Sell an item");
         sellButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sellButtonActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setText("Ip address :");
-
-        connectButton.setText("Connect");
-        connectButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                connectButtonActionPerformed(evt);
             }
         });
 
@@ -87,147 +70,97 @@ public class WindowHome extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("Port :");
-
-        jLabel3.setText("Name :");
-
-        nameTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nameTextFieldActionPerformed(evt);
-            }
-        });
-
-        jButton1.setText("Create an account");
-
         jLabel4.setText("Total of your account :");
 
         accountLabel.setText("jLabel5");
+
+        btnFollow.setText("Follow");
+        btnFollow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFollowActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(buyButton))
+                    .addComponent(buyButton)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(sellButton)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(3, 3, 3)
-                                        .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(124, 124, 124)
+                                        .addComponent(jLabel4))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addGap(5, 5, 5)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(connectButton)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(1, 1, 1)
-                                        .addComponent(ipAddressTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(176, 176, 176)
+                                        .addComponent(accountLabel)))
+                                .addGap(79, 79, 79)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(69, 69, 69)
-                                        .addComponent(jButton1))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(112, 112, 112)
-                                        .addComponent(accountLabel))))
-                            .addComponent(jLabel4))
-                        .addGap(120, 120, 120)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(registerButton)
-                            .addComponent(sellButton)
-                            .addComponent(unregisterButton))
-                        .addGap(0, 1, Short.MAX_VALUE)))
-                .addGap(24, 24, 24))
+                                    .addComponent(unregisterButton)
+                                    .addComponent(btnFollow))))
+                        .addGap(5, 5, 5)))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(buyButton)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(13, 13, 13)
-                                .addComponent(sellButton)
-                                .addGap(27, 27, 27)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(registerButton)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(accountLabel)
-                                .addGap(43, 43, 43)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jButton1)
-                                    .addComponent(connectButton)
-                                    .addComponent(unregisterButton))))
-                        .addContainerGap(46, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(buyButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(sellButton)
                         .addGap(12, 12, 12)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(ipAddressTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(22, 22, 22)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(unregisterButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addComponent(jLabel4)
+                        .addGap(32, 32, 32)
+                        .addComponent(accountLabel)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnFollow)
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_registerButtonActionPerformed
-
     private void sellButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellButtonActionPerformed
         // TODO add your handling code here:
+        WindowSell nextWindow = new WindowSell(bank, server, client);
+        this.setVisible(false);
+        nextWindow.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_sellButtonActionPerformed
-
-    private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
-        // TODO add your handling code here:
-        //se connecter
-        connectButton.setVisible(false);
-        buttonSetVisible(true);
-    }//GEN-LAST:event_connectButtonActionPerformed
 
     private void buyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyButtonActionPerformed
         // TODO add your handling code here:
-        WindowListItem windowItems = new WindowListItem();
+        WindowListItem nextWindow = new WindowListItem(bank, server, client);
         this.setVisible(false);
-        windowItems.setVisible(true);
+        nextWindow.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_buyButtonActionPerformed
 
     private void unregisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unregisterButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_unregisterButtonActionPerformed
 
-    private void nameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTextFieldActionPerformed
+    private void btnFollowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFollowActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nameTextFieldActionPerformed
+        WindowFollow nextWindow = new WindowFollow(bank, server, client);
+        this.setVisible(false);
+        nextWindow.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnFollowActionPerformed
 
      private void buttonSetVisible(Boolean visible) {
         buyButton.setVisible(visible);
         sellButton.setVisible(visible);
-        registerButton.setVisible(visible); 
         unregisterButton.setVisible(visible); 
     }
      
@@ -267,17 +200,9 @@ public class WindowHome extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel accountLabel;
+    private javax.swing.JButton btnFollow;
     private javax.swing.JButton buyButton;
-    private javax.swing.JButton connectButton;
-    private javax.swing.JTextField ipAddressTextField;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField nameTextField;
-    private javax.swing.JTextField portTextField;
-    private javax.swing.JButton registerButton;
     private javax.swing.JButton sellButton;
     private javax.swing.JButton unregisterButton;
     // End of variables declaration//GEN-END:variables

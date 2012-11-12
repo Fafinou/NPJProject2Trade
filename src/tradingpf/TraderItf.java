@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
  *
  * @author fingolfin
  */
-public interface ClientItf extends Remote{
+public interface TraderItf extends Remote{
     public void notifyBuy(Item item) throws RemoteException;
     public void notifyAvailable(Item item) throws RemoteException;
 }
