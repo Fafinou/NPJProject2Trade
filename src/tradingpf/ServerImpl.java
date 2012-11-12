@@ -5,7 +5,6 @@
 package tradingpf;
 
 import java.rmi.RemoteException;
-import java.util.HashMap;
 import java.util.Map;
 import se.kth.id2212.bankrmi.Account;
 import se.kth.id2212.bankrmi.Bank;
@@ -21,6 +20,7 @@ public class ServerImpl implements ServerItf {
     private Bank bank;
     private String bankName;
     private Map<String, ClientItf> registeredClients;
+    private Map<String, Item> itemList;
 
     @Override
     public void register(String name) throws RemoteException, RejectedException {
@@ -52,4 +52,8 @@ public class ServerImpl implements ServerItf {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
+    /*
+     * public Iterator<Item> getItemList() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }*/
 }
