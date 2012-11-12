@@ -24,6 +24,7 @@ public class WindowListItem extends javax.swing.JFrame {
     }
 
     public WindowListItem(String bank, String server, TraderImpl client) {
+        initComponents();
         this.bank = bank;
         this.server = server;
         this.client = client;

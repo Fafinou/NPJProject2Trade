@@ -25,6 +25,7 @@ public class WindowHome extends javax.swing.JFrame {
     }
 
     public WindowHome(String bank, String server, TraderImpl client) {
+        initComponents();
         this.bank = bank;
         this.server = server;
         this.client = client;

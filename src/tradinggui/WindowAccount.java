@@ -24,6 +24,7 @@ public class WindowAccount extends javax.swing.JFrame {
     }
 
     WindowAccount(String bank, String server) {
+        initComponents();
         this.bank = bank;
         this.server = server;
     }

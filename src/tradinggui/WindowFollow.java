@@ -24,6 +24,7 @@ public class WindowFollow extends javax.swing.JFrame {
     }
 
     public WindowFollow(String bank, String server, TraderImpl client) {
+        initComponents();
         this.bank = bank;
         this.server = server;
         this.client = client;

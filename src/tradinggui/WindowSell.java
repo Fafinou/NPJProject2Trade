@@ -24,6 +24,7 @@ public class WindowSell extends javax.swing.JFrame {
     }
 
     public WindowSell(String bank, String server, TraderImpl client) {
+        initComponents();
         this.bank = bank;
         this.server = server;
         this.client = client;

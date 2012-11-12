@@ -24,6 +24,7 @@ public class WindowRegister extends javax.swing.JFrame {
     }
 
     public WindowRegister(String bank, String server, TraderImpl client) {
+        initComponents();
         this.bank = bank;
         this.server = server;
         this.client = client;
