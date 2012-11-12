@@ -52,6 +52,12 @@ public class ServerImpl implements ServerItf {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
+    /* renvoi si le client est enregistré ou pas
+     * public boolean register(String name) {
+     * 
+     * }
+     */
+    
     /*
      * public Iterator<Item> getItemList() {
         throw new UnsupportedOperationException("Not supported yet.");
