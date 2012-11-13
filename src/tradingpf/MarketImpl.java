@@ -9,7 +9,9 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +28,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     private Bank bank;
     private String bankName;
     private Map<String, TraderItf> registeredClients;
-    private Map<String, Item> itemList;
+    private ArrayList<Item> itemList;
     private String marketName;
 
     public MarketImpl(String marketName, String bankName) throws RemoteException {
@@ -39,7 +41,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
         }
         this.marketName = marketName;
         this.registeredClients = new HashMap<String, TraderItf>();
-        this.itemList = new HashMap<String, Item>();
+        this.itemList = new ArrayList<Item>();
     }
 
     @Override
@@ -53,8 +55,8 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     }
 
     @Override
-    public void sell(String name, Item item) throws RemoteException {
-        itemList.put(name, item) ;
+    public void sell(Item item) throws RemoteException {
+        itemList.add(item) ;
     }
 
     @Override
@@ -78,8 +80,13 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
      * }
      */
     
-    /*
-     * public Iterator<Item> getItemList() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }*/
+    @Override
+    public Integer getNumberItem()throws RemoteException {
+        return itemList.size();
+    }
+    
+    @Override
+     public ArrayList<Item> getItemList() throws RemoteException {
+        return itemList;
+    }
 }

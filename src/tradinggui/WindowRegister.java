@@ -8,12 +8,8 @@ import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Account;
-import se.kth.id2212.bankrmi.AccountImpl;
-import se.kth.id2212.bankrmi.Bank;
 import se.kth.id2212.bankrmi.RejectedException;
-import tradingpf.MarketImpl;
 import tradingpf.MarketItf;
-import tradingpf.TraderImpl;
 import tradingpf.TraderItf;
 
 /**
