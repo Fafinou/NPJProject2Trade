@@ -4,9 +4,15 @@
  */
 package tradingpf;
 
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Account;
 import se.kth.id2212.bankrmi.Bank;
 import se.kth.id2212.bankrmi.RejectedException;
@@ -15,18 +21,23 @@ import se.kth.id2212.bankrmi.RejectedException;
  *
  * @author fingolfin
  */
-public class MarketImpl implements MarketItf {
+public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     
-    private Account bankAccount;
     private Bank bank;
     private String bankName;
     private Map<String, TraderItf> registeredClients;
     private Map<String, Item> itemList;
+    private String marketName;
 
-    public MarketImpl(Account bankAccount, Bank bank, String bankName) {
-        this.bankAccount = bankAccount;
-        this.bank = bank;
+    public MarketImpl(String marketName, String bankName) throws RemoteException {
         this.bankName = bankName;
+        try {
+            this.bank = (Bank) Naming.lookup(bankName);
+        } catch (Exception ex) {
+            System.out.println("Cannot get the bank " + ex);
+            System.exit(1);
+        }
+        this.marketName = marketName;
         this.registeredClients = new HashMap<String, TraderItf>();
         this.itemList = new HashMap<String, Item>();
     }

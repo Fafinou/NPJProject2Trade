@@ -9,33 +9,40 @@ package tradingpf;
  * @author fingolfin
  */
 public class StartMarket {
-    	private static final String USAGE = "java bankrmi.Server <bank_rmi_url>";
+    	private static final String USAGE = "StartMarket <market_rmi_url> <bank_rmi_url>";
 	private static final String BANK = "Nordea";
-
-	public StartMarket(String marketName) {
+        private static final String MARKET = "Ebay";
+	public StartMarket(String marketName, String bankName) {
 		try {
-			MarketImpl market = new MarketImpl(marketName);
+			MarketImpl marketObj = new MarketImpl(marketName, bankName);
 			// Register the newly created object at rmiregistry.
-			java.rmi.Naming.rebind(bankName, bankobj);
-			System.out.println(bankobj + " is ready.");
+			java.rmi.Naming.rebind(marketName, marketObj);
+			System.out.println(marketObj.toString() + " is ready.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void main(String[] args) {
-		if (args.length > 1 || (args.length > 0 && args[0].equalsIgnoreCase("-h"))) {
+		if (args.length > 2 || (args.length > 0 && args[0].equalsIgnoreCase("-h"))) {
 			System.out.println(USAGE);
 			System.exit(1);
 		}
 
 		String bankName = null;
+                String marketName = null;
 		if (args.length > 0) {
 			bankName = args[0];
 		} else {
 			bankName = BANK;
 		}
+                
+                if (args.length > 1) {
+                    marketName = args[1];
+                }else{
+                    marketName = MARKET;
+                }
 
-		new Server(bankName);
+		new StartMarket(marketName,bankName);
 	}
 }
