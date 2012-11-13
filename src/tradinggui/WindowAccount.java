@@ -7,10 +7,14 @@ package tradinggui;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import se.kth.id2212.bankrmi.Account;
+import se.kth.id2212.bankrmi.AccountImpl;
 import se.kth.id2212.bankrmi.Bank;
 import se.kth.id2212.bankrmi.RejectedException;
 import tradingpf.MarketImpl;
+import tradingpf.MarketItf;
 import tradingpf.TraderImpl;
+import tradingpf.TraderItf;
 
 /**
  *
@@ -19,8 +23,8 @@ import tradingpf.TraderImpl;
 public class WindowAccount extends javax.swing.JFrame {
 
     private Bank bank;
-    private MarketImpl server;
-    private TraderImpl client;
+    private MarketItf server;
+    private TraderItf client;
 
     /**
      * Creates new form WindowAccount
@@ -29,7 +33,7 @@ public class WindowAccount extends javax.swing.JFrame {
         initComponents();
     }
 
-    WindowAccount(Bank bank, MarketImpl server) {
+    WindowAccount(Bank bank, MarketItf server) {
         initComponents();
         this.bank = bank;
         this.server = server;
@@ -124,7 +128,17 @@ public class WindowAccount extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             System.out.println(ex);
         }
-        WindowRegister nextWindow = new WindowRegister(bank, server, client, clientName);
+        Account account = null;
+        account = ((TraderImpl)client).getClientBankAccount();
+        if(account == null){
+            System.err.println("no account !!");
+            System.exit(1);
+        }
+        WindowRegister nextWindow = 
+                new WindowRegister(account, 
+                                    server,
+                                    client,
+                                    clientName);
         nextWindow.setVisible(true);
         this.setVisible(false);
         this.dispose();
@@ -148,13 +162,18 @@ public class WindowAccount extends javax.swing.JFrame {
         try {
             //Create a new account and make a 100$ deposit on it. Yes, we are nice guys ;)
             client = new TraderImpl(clientName, bank.newAccount(clientName));
-            client.getClientBankAccount().deposit(100);
+            ((TraderImpl)client).getClientBankAccount().deposit(100);
         } catch (RemoteException ex) {
             System.out.println(ex);
         } catch (RejectedException ex) {
             System.out.println(ex);
         }
-        WindowRegister nextWindow = new WindowRegister(bank, server, client, clientName);
+        
+        WindowRegister nextWindow = 
+                new WindowRegister(((TraderImpl)client).getClientBankAccount(), 
+                                    server, 
+                                    client, 
+                                    clientName);
         nextWindow.setVisible(true);
         this.setVisible(false);
         this.dispose();

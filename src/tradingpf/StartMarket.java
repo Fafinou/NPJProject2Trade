@@ -29,19 +29,8 @@ public class StartMarket {
 			System.exit(1);
 		}
 
-		String bankName = null;
-                String marketName = null;
-		if (args.length > 0) {
-			bankName = args[0];
-		} else {
-			bankName = BANK;
-		}
-                
-                if (args.length > 1) {
-                    marketName = args[1];
-                }else{
-                    marketName = MARKET;
-                }
+                String bankName = BANK;
+                String marketName = MARKET;
 
 		new StartMarket(marketName,bankName);
 	}

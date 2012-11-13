@@ -11,7 +11,9 @@ import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Bank;
+import se.kth.id2212.bankrmi.BankImpl;
 import tradingpf.MarketImpl;
+import tradingpf.MarketItf;
 
 /**
  *
@@ -20,7 +22,7 @@ import tradingpf.MarketImpl;
 public class WindowConfig extends javax.swing.JFrame {
 
     private Bank bank;
-    private MarketImpl server;
+    private MarketItf server;
     private static final String BANK = "Nordea";
     private static final String MARKET = "Ebay";
     /**
@@ -99,6 +101,7 @@ public class WindowConfig extends javax.swing.JFrame {
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         // TODO add your handling code here:
+        //initAll();
         initBank();
         initServer();
         WindowAccount nextWindow = new WindowAccount(bank, server);
@@ -175,10 +178,37 @@ public class WindowConfig extends javax.swing.JFrame {
             serverName = MARKET;
         }
         try {
-            server = (MarketImpl) Naming.lookup(serverName);
+            server = (MarketItf) Naming.lookup(serverName);
         } catch (Exception ex) {
-            System.out.println("The runtime failed: " + ex.getMessage());
+            System.out.println("The runtime failed during market: " + ex.getMessage());
             System.exit(0);
+        }
+    }
+    
+    private void initAll(){
+        String serverName = textFieldServer.getText();
+        String bankName = textFieldBank.getText();
+        MarketItf newMarket = null;
+        Bank newBank = null;
+        if(bankName.equals("")){
+            bankName = BANK;
+        }
+        if (serverName.equals("")){
+            serverName = MARKET;
+        }
+        try {
+            newMarket = new MarketImpl(serverName, bankName);
+            newBank = new BankImpl(bankName);
+        } catch (RemoteException ex) {
+            System.out.println("the runtime failed: "+ ex);
+        }
+        try {
+            java.rmi.Naming.rebind(bankName, newBank);
+            System.out.println(newBank.toString() + " is ready.");
+            java.rmi.Naming.rebind(serverName, newMarket);
+            System.out.println(newMarket.toString() + " is ready.");
+        } catch (Exception ex) {
+          ex.printStackTrace();
         }
     }
 }

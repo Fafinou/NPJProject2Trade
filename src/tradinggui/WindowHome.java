@@ -7,10 +7,13 @@ package tradinggui;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import se.kth.id2212.bankrmi.Account;
 import se.kth.id2212.bankrmi.AccountImpl;
 import se.kth.id2212.bankrmi.Bank;
 import tradingpf.MarketImpl;
+import tradingpf.MarketItf;
 import tradingpf.TraderImpl;
+import tradingpf.TraderItf;
 
 /**
  *
@@ -18,9 +21,9 @@ import tradingpf.TraderImpl;
  */
 public class WindowHome extends javax.swing.JFrame {
 
-    private AccountImpl account;
-    private MarketImpl server;
-    private TraderImpl client;
+    private Account account;
+    private MarketItf server;
+    private TraderItf client;
 
     /**
      * Creates new form WindowHome
@@ -29,7 +32,7 @@ public class WindowHome extends javax.swing.JFrame {
         initComponents();
     }
 
-    public WindowHome(AccountImpl account, MarketImpl server, TraderImpl client) {
+    public WindowHome(Account account, MarketItf server, TraderItf client) {
         initComponents();
         this.account = account;
         this.server = server;

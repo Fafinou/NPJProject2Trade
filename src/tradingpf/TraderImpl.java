@@ -4,6 +4,7 @@
  */
 package tradingpf;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import se.kth.id2212.bankrmi.Account;
 import se.kth.id2212.bankrmi.Bank;
@@ -12,7 +13,7 @@ import se.kth.id2212.bankrmi.Bank;
  *
  * @author fingolfin
  */
-public class TraderImpl implements TraderItf{
+public class TraderImpl implements TraderItf, Serializable{
 
     private String clientName;
     private Account clientBankAccount;

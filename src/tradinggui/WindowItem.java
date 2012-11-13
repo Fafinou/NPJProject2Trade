@@ -4,20 +4,19 @@
  */
 package tradinggui;
 
+import se.kth.id2212.bankrmi.Account;
 import se.kth.id2212.bankrmi.AccountImpl;
 import se.kth.id2212.bankrmi.Bank;
-import tradingpf.Item;
-import tradingpf.MarketImpl;
-import tradingpf.TraderImpl;
+import tradingpf.*;
 /**
  *
  * @author zoe
  */
 public class WindowItem extends javax.swing.JFrame {
 
-    private AccountImpl account;
-    private MarketImpl server;
-    private TraderImpl client;
+    private Account account;
+    private MarketItf server;
+    private TraderItf client;
     private Item item;
 
     
@@ -26,7 +25,7 @@ public class WindowItem extends javax.swing.JFrame {
         initComponents();
     }
 
-    public WindowItem(AccountImpl account, MarketImpl server, TraderImpl client, Item item) {
+    public WindowItem(Account account, MarketItf server, TraderItf client, Item item) {
         initComponents();
         this.account = account;
         this.server = server;

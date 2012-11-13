@@ -7,11 +7,14 @@ package tradinggui;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import se.kth.id2212.bankrmi.Account;
 import se.kth.id2212.bankrmi.AccountImpl;
 import se.kth.id2212.bankrmi.Bank;
 import se.kth.id2212.bankrmi.RejectedException;
 import tradingpf.MarketImpl;
+import tradingpf.MarketItf;
 import tradingpf.TraderImpl;
+import tradingpf.TraderItf;
 
 /**
  *
@@ -19,9 +22,9 @@ import tradingpf.TraderImpl;
  */
 public class WindowRegister extends javax.swing.JFrame {
 
-    private AccountImpl account;
-    private MarketImpl server;
-    private TraderImpl client;
+    private Account account;
+    private MarketItf server;
+    private TraderItf client;
     private String clientName;
 
     /**
@@ -31,7 +34,7 @@ public class WindowRegister extends javax.swing.JFrame {
         initComponents();
     }
 
-    public WindowRegister(AccountImpl account, MarketImpl server, TraderImpl client, 
+    public WindowRegister(Account account, MarketItf server, TraderItf client, 
             String clientName) {
         initComponents();
         this.account = account;

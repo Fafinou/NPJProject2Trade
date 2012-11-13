@@ -4,10 +4,13 @@
  */
 package tradinggui;
 
+import se.kth.id2212.bankrmi.Account;
 import se.kth.id2212.bankrmi.AccountImpl;
 import se.kth.id2212.bankrmi.Bank;
 import tradingpf.MarketImpl;
+import tradingpf.MarketItf;
 import tradingpf.TraderImpl;
+import tradingpf.TraderItf;
 
 /**
  *
@@ -15,9 +18,9 @@ import tradingpf.TraderImpl;
  */
 public class WindowFollow extends javax.swing.JFrame {
 
-    private AccountImpl account;
-    private MarketImpl server;
-    private TraderImpl client;
+    private Account account;
+    private MarketItf server;
+    private TraderItf client;
 
     /**
      * Creates new form WindowFollow
@@ -26,7 +29,7 @@ public class WindowFollow extends javax.swing.JFrame {
         initComponents();
     }
 
-    public WindowFollow(AccountImpl account, MarketImpl server, TraderImpl client) {
+    public WindowFollow(Account account, MarketItf server, TraderItf client) {
         initComponents();
         this.account = account;
         this.server = server;
