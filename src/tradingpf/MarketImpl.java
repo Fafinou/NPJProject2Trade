@@ -5,6 +5,7 @@
 package tradingpf;
 
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.Map;
 import se.kth.id2212.bankrmi.Account;
 import se.kth.id2212.bankrmi.Bank;
@@ -22,6 +23,14 @@ public class MarketImpl implements MarketItf {
     private Map<String, TraderItf> registeredClients;
     private Map<String, Item> itemList;
 
+    public MarketImpl(Account bankAccount, Bank bank, String bankName) {
+        this.bankAccount = bankAccount;
+        this.bank = bank;
+        this.bankName = bankName;
+        this.registeredClients = new HashMap<String, TraderItf>();
+        this.itemList = new HashMap<String, Item>();
+    }
+
     @Override
     public void register(String name, TraderItf client) throws RemoteException, RejectedException {
         registeredClients.put(name, client);
@@ -34,11 +43,11 @@ public class MarketImpl implements MarketItf {
 
     @Override
     public void sell(String name, Item item) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        itemList.put(name, item) ;
     }
 
     @Override
-    public void buy(String name, Item item) throws RemoteException {
+    public void buy(String clientName, Item item) throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

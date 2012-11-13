@@ -39,4 +39,7 @@ public class TraderImpl implements TraderItf{
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
+    public String getName() {
+        return clientName;
+    }
 }
