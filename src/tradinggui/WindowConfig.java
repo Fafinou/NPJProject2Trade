@@ -4,6 +4,12 @@
  */
 package tradinggui;
 
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Bank;
 import tradingpf.MarketImpl;
 
@@ -15,7 +21,8 @@ public class WindowConfig extends javax.swing.JFrame {
 
     private Bank bank;
     private MarketImpl server;
-    
+    private static final String BANK = "Nordea";
+    private static final String MARKET = "Ebay";
     /**
      * Creates new form WindowConfig
      */
@@ -100,15 +107,18 @@ public class WindowConfig extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnOkActionPerformed
 
-    
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+        /*
+         * Set the Nimbus look and feel
+         */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the
+         * default look and feel. For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -128,8 +138,11 @@ public class WindowConfig extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        /*
+         * Create and display the form
+         */
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 new WindowConfig().setVisible(true);
             }
@@ -143,14 +156,29 @@ public class WindowConfig extends javax.swing.JFrame {
     private javax.swing.JTextField textFieldServer;
     // End of variables declaration//GEN-END:variables
 
-    
-    private void initBank(){
+    private void initBank() {
         String bankName = textFieldBank.getText();
-        
-        
+        if(bankName.equals("")){
+            bankName = BANK;
+        }
+        try {
+            bank = (Bank) Naming.lookup(bankName);
+        } catch (Exception ex) {
+            System.out.println("The runtime failed: " + ex.getMessage());
+            System.exit(0);
+        }
     }
-    
+
     private void initServer() {
-        String serverName = textFieldServer.getText();                
+        String serverName = textFieldServer.getText();
+        if (serverName.equals("")){
+            serverName = MARKET;
+        }
+        try {
+            server = (MarketImpl) Naming.lookup(serverName);
+        } catch (Exception ex) {
+            System.out.println("The runtime failed: " + ex.getMessage());
+            System.exit(0);
+        }
     }
 }

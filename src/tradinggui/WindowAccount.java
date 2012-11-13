@@ -4,7 +4,11 @@
  */
 package tradinggui;
 
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Bank;
+import se.kth.id2212.bankrmi.RejectedException;
 import tradingpf.MarketImpl;
 import tradingpf.TraderImpl;
 
@@ -111,7 +115,16 @@ public class WindowAccount extends javax.swing.JFrame {
     private void btnAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccountActionPerformed
         // TODO add your handling code here:
         String clientName = textFieldName.getText();
-        WindowRegister nextWindow = new WindowRegister(bank,server,client,clientName);
+        if (clientName.equals("")) {
+            System.out.println("Error, empty name");
+            System.exit(1);
+        }
+        try {
+            client = new TraderImpl(clientName, bank.getAccount(clientName));
+        } catch (RemoteException ex) {
+            System.out.println(ex);
+        }
+        WindowRegister nextWindow = new WindowRegister(bank, server, client, clientName);
         nextWindow.setVisible(true);
         this.setVisible(false);
         this.dispose();
@@ -127,22 +140,38 @@ public class WindowAccount extends javax.swing.JFrame {
 
     private void btnCreateAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateAccountActionPerformed
         // TODO add your handling code here:
-        //client = ...
         String clientName = textFieldName.getText();
-        WindowRegister nextWindow = new WindowRegister(bank,server, client, clientName);
+        if (clientName.equals("")) {
+            System.out.println("Error, empty name");
+            System.exit(1);
+        }
+        try {
+            //Create a new account and make a 100$ deposit on it. Yes, we are nice guys ;)
+            client = new TraderImpl(clientName, bank.newAccount(clientName));
+            client.getClientBankAccount().deposit(100);
+        } catch (RemoteException ex) {
+            System.out.println(ex);
+        } catch (RejectedException ex) {
+            System.out.println(ex);
+        }
+        WindowRegister nextWindow = new WindowRegister(bank, server, client, clientName);
         nextWindow.setVisible(true);
         this.setVisible(false);
-        this.dispose();                   
+        this.dispose();
     }//GEN-LAST:event_btnCreateAccountActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+        /*
+         * Set the Nimbus look and feel
+         */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the
+         * default look and feel. For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -162,8 +191,11 @@ public class WindowAccount extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        /*
+         * Create and display the form
+         */
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             @Override
             public void run() {
                 new WindowAccount().setVisible(true);

@@ -15,16 +15,18 @@ import se.kth.id2212.bankrmi.Bank;
 public class TraderImpl implements TraderItf{
 
     private String clientName;
-    private Account bankAccount;
+    private Account clientBankAccount;
     private Bank bankServer;
-    private String bankName;
-    private String tradePfName;
     private MarketItf tradePfServer;
 
-    public TraderImpl(String clientName, String bankName, String tradePfName) {
+
+    public TraderImpl(String clientName, Account clientBankAccount) {
         this.clientName = clientName;
-        this.bankName = bankName;
-        this.tradePfName = tradePfName;
+        this.clientBankAccount = clientBankAccount;
+    }
+
+    public Account getClientBankAccount() {
+        return clientBankAccount;
     }
     
     @Override
