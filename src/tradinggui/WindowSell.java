@@ -4,7 +4,11 @@
  */
 package tradinggui;
 
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Bank;
+import tradingpf.Item;
 import tradingpf.MarketImpl;
 import tradingpf.TraderImpl;
 
@@ -134,6 +138,21 @@ public class WindowSell extends javax.swing.JFrame {
 
     private void btnSellActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSellActionPerformed
         // TODO add your handling code here::
+        String itemName = nameTextField.getText();
+        Integer price = 0;
+        try {
+            price =  Integer.parseInt(priceTextField.getText());
+        } catch (NumberFormatException ex) {
+            System.err.println("Error : Price is not an integer");
+            System.exit(1);
+        }
+        String sellerName = client.getName();
+        Item itemSell = new Item(itemName, price, sellerName);
+        try {
+            server.sell(itemName, itemSell);
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowSell.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.setVisible(false);
         WindowHome nextWindow = new WindowHome(bank, server, client);
         nextWindow.setVisible(true);
