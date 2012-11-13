@@ -61,6 +61,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     @Override
     public void sell(Item item) throws RemoteException {
         itemList.add(item) ;
+        lookupFollower(item);
     }
 
     @Override
@@ -80,7 +81,6 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
         if (wishFound(toAdd)){
             follower.notifyAvailable(itemName);
         }
-        
     }
     
     /* renvoi si le client est enregistré ou pas
@@ -98,8 +98,31 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
     private boolean wishFound(Wish wish){
         Iterator<Item> iter = this.itemList.iterator();
-        //iterate over the arraylist to find a match
+        for (Iterator<Item> it = itemList.iterator(); it.hasNext();) {
+            Item item = it.next();
+            if(item.getName().equals(wish.getObjectName())){
+                if(item.getPrice() <= wish.getObjectPrice()){
+                    return true;
+                }
+            }
+            
+        }
         return false;
+    }
+    
+    private void lookupFollower(Item item){
+        for (Iterator<Wish> it = wishesList.iterator(); it.hasNext();) {
+            Wish wish = it.next();
+            if (wish.getObjectName().equals(item.getName())){
+                if(wish.getObjectPrice() >= item.getPrice()){
+                    try {
+                        wish.getFollower().notifyAvailable(item.getName());
+                    } catch (RemoteException ex) {
+                        System.err.println("Something wrong: " + ex);
+                    }
+                }
+            }
+        }
     }
     
     @Override
