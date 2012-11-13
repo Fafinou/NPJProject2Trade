@@ -4,12 +4,17 @@
  */
 package tradinggui;
 
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
 import se.kth.id2212.bankrmi.Account;
-import se.kth.id2212.bankrmi.AccountImpl;
-import se.kth.id2212.bankrmi.Bank;
+import tradingpf.Item;
 import tradingpf.MarketImpl;
 import tradingpf.MarketItf;
-import tradingpf.TraderImpl;
 import tradingpf.TraderItf;
 
 /**
@@ -34,6 +39,39 @@ public class WindowListItem extends javax.swing.JFrame {
         this.account = account;
         this.server = server;
         this.client = client;
+        initList();
+        
+   }
+    
+    private void initList(){
+        
+        Integer nbItem = 0;
+        try {
+            nbItem = server.getNumberItem();
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowListItem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String items[] = new String[nbItem] ;
+        Integer i = 0;
+        Item currentItem;
+        ArrayList<Item> itemList = new ArrayList<Item>();
+        try {
+             itemList = server.getItemList(); 
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowListItem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for (Iterator<Item> it = itemList.iterator(); it.hasNext();) {
+            currentItem = it.next();
+            items[i] = (currentItem.getName()).concat(
+                     Integer.toString(currentItem.getPrice()));
+            i ++;
+        }
+        JList list= new JList(items);
+        /* AFFICHER  LA LISTE */
+        //list.setVisible(true);
+        //this.add(new JScrollPane(list));
+        //this.pack();
+        //this.setVisible(true);
     }
 
     /**
@@ -45,18 +83,9 @@ public class WindowListItem extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
         btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
 
         btnCancel.setText("Cancel");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -70,18 +99,14 @@ public class WindowListItem extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnCancel)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(253, 253, 253)
+                .addComponent(btnCancel)
                 .addContainerGap(87, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addContainerGap(258, Short.MAX_VALUE)
                 .addComponent(btnCancel)
                 .addContainerGap())
         );
@@ -134,7 +159,5 @@ public class WindowListItem extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
-    private javax.swing.JList jList1;
-    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

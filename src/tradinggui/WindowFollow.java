@@ -5,11 +5,7 @@
 package tradinggui;
 
 import se.kth.id2212.bankrmi.Account;
-import se.kth.id2212.bankrmi.AccountImpl;
-import se.kth.id2212.bankrmi.Bank;
-import tradingpf.MarketImpl;
 import tradingpf.MarketItf;
-import tradingpf.TraderImpl;
 import tradingpf.TraderItf;
 
 /**

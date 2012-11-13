@@ -8,8 +8,6 @@ import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Account;
-import se.kth.id2212.bankrmi.AccountImpl;
-import se.kth.id2212.bankrmi.Bank;
 import tradingpf.*;
 
 /**
@@ -149,7 +147,7 @@ public class WindowSell extends javax.swing.JFrame {
         String sellerName = ((TraderImpl)client).getName();
         Item itemSell = new Item(itemName, price, sellerName);
         try {
-            server.sell(itemName, itemSell);
+            server.sell(itemSell);
         } catch (RemoteException ex) {
             Logger.getLogger(WindowSell.class.getName()).log(Level.SEVERE, null, ex);
         }
