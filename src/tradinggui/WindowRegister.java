@@ -7,6 +7,7 @@ package tradinggui;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import se.kth.id2212.bankrmi.AccountImpl;
 import se.kth.id2212.bankrmi.Bank;
 import se.kth.id2212.bankrmi.RejectedException;
 import tradingpf.MarketImpl;
@@ -18,7 +19,7 @@ import tradingpf.TraderImpl;
  */
 public class WindowRegister extends javax.swing.JFrame {
 
-    private Bank bank;
+    private AccountImpl account;
     private MarketImpl server;
     private TraderImpl client;
     private String clientName;
@@ -30,10 +31,10 @@ public class WindowRegister extends javax.swing.JFrame {
         initComponents();
     }
 
-    public WindowRegister(Bank bank, MarketImpl server, TraderImpl client, 
+    public WindowRegister(AccountImpl account, MarketImpl server, TraderImpl client, 
             String clientName) {
         initComponents();
-        this.bank = bank;
+        this.account = account;
         this.server = server;
         this.client = client;
         this.clientName = clientName;
@@ -101,7 +102,7 @@ public class WindowRegister extends javax.swing.JFrame {
         } catch (RejectedException ex) {
             Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
         }
-        WindowHome nextWindow = new WindowHome(bank, server, client);
+        WindowHome nextWindow = new WindowHome(account, server, client);
         nextWindow.setVisible(true);
         this.setVisible(false);
         this.dispose();
@@ -109,7 +110,7 @@ public class WindowRegister extends javax.swing.JFrame {
 
     private void btnContinueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinueActionPerformed
         // TODO add your handling code here:
-        WindowHome nextWindow = new WindowHome(bank, server, client);
+        WindowHome nextWindow = new WindowHome(account, server, client);
         nextWindow.setVisible(true);
         this.setVisible(false);
         this.dispose();

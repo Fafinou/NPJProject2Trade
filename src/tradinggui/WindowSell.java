@@ -7,6 +7,7 @@ package tradinggui;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import se.kth.id2212.bankrmi.AccountImpl;
 import se.kth.id2212.bankrmi.Bank;
 import tradingpf.Item;
 import tradingpf.MarketImpl;
@@ -18,7 +19,7 @@ import tradingpf.TraderImpl;
  */
 public class WindowSell extends javax.swing.JFrame {
 
-    private Bank bank;
+    private AccountImpl account;
     private MarketImpl server;
     private TraderImpl client;
 
@@ -29,9 +30,9 @@ public class WindowSell extends javax.swing.JFrame {
         initComponents();
     }
 
-    public WindowSell(Bank bank, MarketImpl server, TraderImpl client) {
+    public WindowSell(AccountImpl account, MarketImpl server, TraderImpl client) {
         initComponents();
-        this.bank = bank;
+        this.account = account;
         this.server = server;
         this.client = client;
     }
@@ -154,7 +155,7 @@ public class WindowSell extends javax.swing.JFrame {
             Logger.getLogger(WindowSell.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(false);
-        WindowHome nextWindow = new WindowHome(bank, server, client);
+        WindowHome nextWindow = new WindowHome(account, server, client);
         nextWindow.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnSellActionPerformed
@@ -174,7 +175,7 @@ public class WindowSell extends javax.swing.JFrame {
     private void btnChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeActionPerformed
         // TODO add your handling code here:
         this.setVisible(false);
-        WindowHome nextWindow = new WindowHome(bank, server, client);
+        WindowHome nextWindow = new WindowHome(account, server, client);
         nextWindow.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnChangeActionPerformed
