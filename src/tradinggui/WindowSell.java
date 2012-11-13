@@ -4,6 +4,8 @@
  */
 package tradinggui;
 
+import se.kth.id2212.bankrmi.Bank;
+import tradingpf.MarketImpl;
 import tradingpf.TraderImpl;
 
 /**
@@ -12,8 +14,8 @@ import tradingpf.TraderImpl;
  */
 public class WindowSell extends javax.swing.JFrame {
 
-    private String bank;
-    private String server;
+    private Bank bank;
+    private MarketImpl server;
     private TraderImpl client;
 
     /**
@@ -23,7 +25,7 @@ public class WindowSell extends javax.swing.JFrame {
         initComponents();
     }
 
-    public WindowSell(String bank, String server, TraderImpl client) {
+    public WindowSell(Bank bank, MarketImpl server, TraderImpl client) {
         initComponents();
         this.bank = bank;
         this.server = server;

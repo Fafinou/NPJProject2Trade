@@ -23,8 +23,8 @@ public class MarketImpl implements MarketItf {
     private Map<String, Item> itemList;
 
     @Override
-    public void register(String name) throws RemoteException, RejectedException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void register(String name, TraderItf client) throws RemoteException, RejectedException {
+        registeredClients.put(name, client);
     }
 
     @Override

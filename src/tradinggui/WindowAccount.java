@@ -4,6 +4,8 @@
  */
 package tradinggui;
 
+import se.kth.id2212.bankrmi.Bank;
+import tradingpf.MarketImpl;
 import tradingpf.TraderImpl;
 
 /**
@@ -12,8 +14,8 @@ import tradingpf.TraderImpl;
  */
 public class WindowAccount extends javax.swing.JFrame {
 
-    private String bank;
-    private String server;
+    private Bank bank;
+    private MarketImpl server;
     private TraderImpl client;
 
     /**
@@ -23,7 +25,7 @@ public class WindowAccount extends javax.swing.JFrame {
         initComponents();
     }
 
-    WindowAccount(String bank, String server) {
+    WindowAccount(Bank bank, MarketImpl server) {
         initComponents();
         this.bank = bank;
         this.server = server;
@@ -108,8 +110,8 @@ public class WindowAccount extends javax.swing.JFrame {
 
     private void btnAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccountActionPerformed
         // TODO add your handling code here:
-        //
-        WindowRegister nextWindow = new WindowRegister(bank,server,client);
+        String clientName = textFieldName.getText();
+        WindowRegister nextWindow = new WindowRegister(bank,server,client,clientName);
         nextWindow.setVisible(true);
         this.setVisible(false);
         this.dispose();
@@ -126,7 +128,8 @@ public class WindowAccount extends javax.swing.JFrame {
     private void btnCreateAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateAccountActionPerformed
         // TODO add your handling code here:
         //client = ...
-        WindowRegister nextWindow = new WindowRegister(bank,server, client);
+        String clientName = textFieldName.getText();
+        WindowRegister nextWindow = new WindowRegister(bank,server, client, clientName);
         nextWindow.setVisible(true);
         this.setVisible(false);
         this.dispose();                   

@@ -4,14 +4,17 @@
  */
 package tradinggui;
 
+import se.kth.id2212.bankrmi.Bank;
+import tradingpf.MarketImpl;
+
 /**
  *
  * @author zoe
  */
 public class WindowConfig extends javax.swing.JFrame {
 
-    private String bank;
-    private String server;
+    private Bank bank;
+    private MarketImpl server;
     
     /**
      * Creates new form WindowConfig
@@ -89,8 +92,8 @@ public class WindowConfig extends javax.swing.JFrame {
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         // TODO add your handling code here:
-        //initBankName();
-        //initServerName();
+        initBank();
+        initServer();
         WindowAccount nextWindow = new WindowAccount(bank, server);
         nextWindow.setVisible(true);
         this.setVisible(false);
@@ -141,11 +144,13 @@ public class WindowConfig extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     
-    private void initBankName(){
-        throw new UnsupportedOperationException("Not yet implemented");
+    private void initBank(){
+        String bankName = textFieldBank.getText();
+        
+        
     }
     
-    private void initServerName() {
-        throw new UnsupportedOperationException("Not yet implemented");
+    private void initServer() {
+        String serverName = textFieldServer.getText();                
     }
 }

@@ -13,7 +13,7 @@ import se.kth.id2212.bankrmi.RejectedException;
  * @author fingolfin
  */
 public interface MarketItf extends Remote {
-    public void register(String name) throws RemoteException, RejectedException;
+    public void register(String name, TraderItf client) throws RemoteException, RejectedException;
     public void unregister(String name) throws RemoteException;
     public void sell(String name, Item item) throws RemoteException;
     public void buy(String name, Item item) throws RemoteException;

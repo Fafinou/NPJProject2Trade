@@ -4,6 +4,12 @@
  */
 package tradinggui;
 
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import se.kth.id2212.bankrmi.Bank;
+import se.kth.id2212.bankrmi.RejectedException;
+import tradingpf.MarketImpl;
 import tradingpf.TraderImpl;
 
 /**
@@ -12,9 +18,10 @@ import tradingpf.TraderImpl;
  */
 public class WindowRegister extends javax.swing.JFrame {
 
-    private String bank;
-    private String server;
+    private Bank bank;
+    private MarketImpl server;
     private TraderImpl client;
+    private String clientName;
 
     /**
      * Creates new form WindowRegister
@@ -23,11 +30,13 @@ public class WindowRegister extends javax.swing.JFrame {
         initComponents();
     }
 
-    public WindowRegister(String bank, String server, TraderImpl client) {
+    public WindowRegister(Bank bank, MarketImpl server, TraderImpl client, 
+            String clientName) {
         initComponents();
         this.bank = bank;
         this.server = server;
         this.client = client;
+        this.clientName = clientName;
     }
 
 
@@ -84,7 +93,14 @@ public class WindowRegister extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            server.register(clientName, client);
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RejectedException ex) {
+            Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
+        }
         WindowHome nextWindow = new WindowHome(bank, server, client);
         nextWindow.setVisible(true);
         this.setVisible(false);
@@ -128,6 +144,7 @@ public class WindowRegister extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new WindowRegister().setVisible(true);
             }
