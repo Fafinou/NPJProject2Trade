@@ -132,8 +132,9 @@ public class WindowFollow extends javax.swing.JFrame {
         try {
             server.wish(client, articleName, articlePrice);
         } catch (RemoteException ex) {
-            System.err.println("something went wrong: "+ex);
+            Logger.getLogger(WindowFollow.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         WindowHome nextWindow = new WindowHome(account, server, client);
         nextWindow.setVisible(true);
         this.setVisible(false);

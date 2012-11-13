@@ -36,9 +36,10 @@ public class TraderImpl implements TraderItf, Serializable{
     }
 
     @Override
-    public void notifyAvailable(String itemName) throws RemoteException {
-        WindowAvailableNotify popUp = new WindowAvailableNotify(itemName);
-        popUp.setVisible(true);
+    public synchronized void notifyAvailable(String itemName) throws RemoteException {
+        //WindowAvailableNotify popUp = new WindowAvailableNotify(itemName);
+        //popUp.setVisible(true);
+        System.out.println("item : " + itemName + "Available");
     }
     
     public String getName() {
