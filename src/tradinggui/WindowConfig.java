@@ -4,6 +4,7 @@
  */
 package tradinggui;
 
+import com.sun.xml.internal.bind.util.Which;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -151,6 +152,9 @@ public class WindowConfig extends javax.swing.JFrame {
             }
         });
     }
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOk;
     private javax.swing.JLabel jLabel1;
@@ -183,6 +187,7 @@ public class WindowConfig extends javax.swing.JFrame {
             System.out.println("The runtime failed during market: " + ex.getMessage());
             System.exit(0);
         }
+        
     }
     
     private void initAll(){

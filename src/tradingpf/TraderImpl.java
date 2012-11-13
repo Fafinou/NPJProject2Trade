@@ -29,18 +29,19 @@ public class TraderImpl implements TraderItf, Serializable{
     public Account getClientBankAccount() {
         return clientBankAccount;
     }
-    
-    @Override
-    public void notifyBuy(Item item) throws RemoteException {
+        @Override
+    public void notifyBuy(String itemName) throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void notifyAvailable(Item item) throws RemoteException {
+    public void notifyAvailable(String itemName) throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
     public String getName() {
         return clientName;
     }
+
+
 }

@@ -9,7 +9,9 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +29,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     private String bankName;
     private Map<String, TraderItf> registeredClients;
     private Map<String, Item> itemList;
+    private ArrayList<Wish> wishesList;
     private String marketName;
 
     public MarketImpl(String marketName, String bankName) throws RemoteException {
@@ -40,6 +43,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
         this.marketName = marketName;
         this.registeredClients = new HashMap<String, TraderItf>();
         this.itemList = new HashMap<String, Item>();
+        this.wishesList = new ArrayList<Wish>();
     }
 
     @Override
@@ -68,8 +72,13 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     }
 
     @Override
-    public void wish(String name, String itemName, Integer itemPrice) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void wish(TraderItf follower, String itemName, Integer itemPrice) throws RemoteException {
+        Wish toAdd = new Wish(follower, itemName, itemPrice);
+        this.wishesList.add(toAdd);
+        if (wishFound(toAdd)){
+            follower.notifyAvailable(itemName);
+        }
+        
     }
     
     /* renvoi si le client est enregistré ou pas
@@ -82,4 +91,11 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
      * public Iterator<Item> getItemList() {
         throw new UnsupportedOperationException("Not supported yet.");
     }*/
+
+
+    private boolean wishFound(Wish wish){
+        Iterator<Item> iter = this.itemList.iterator();
+        //iterate over the arraylist to find a match
+        return false;
+    }
 }

@@ -13,6 +13,6 @@ import java.rmi.RemoteException;
  * @author fingolfin
  */
 public interface TraderItf extends Remote{
-    public void notifyBuy(Item item) throws RemoteException;
-    public void notifyAvailable(Item item) throws RemoteException;
+    public void notifyBuy(String itemName) throws RemoteException;
+    public void notifyAvailable(String itemName) throws RemoteException;
 }
