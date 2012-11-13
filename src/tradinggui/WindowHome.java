@@ -4,6 +4,10 @@
  */
 package tradinggui;
 
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import se.kth.id2212.bankrmi.AccountImpl;
 import se.kth.id2212.bankrmi.Bank;
 import tradingpf.MarketImpl;
 import tradingpf.TraderImpl;
@@ -14,7 +18,7 @@ import tradingpf.TraderImpl;
  */
 public class WindowHome extends javax.swing.JFrame {
 
-    private Bank bank;
+    private AccountImpl account;
     private MarketImpl server;
     private TraderImpl client;
 
@@ -23,14 +27,18 @@ public class WindowHome extends javax.swing.JFrame {
      */
     public WindowHome() {
         initComponents();
-        buttonSetVisible(false);
     }
 
-    public WindowHome(Bank bank, MarketImpl server, TraderImpl client) {
+    public WindowHome(AccountImpl account, MarketImpl server, TraderImpl client) {
         initComponents();
-        this.bank = bank;
+        this.account = account;
         this.server = server;
         this.client = client;
+        try {
+            accountLabel.setText(Float.toString(account.getBalance()));
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowHome.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 
@@ -135,7 +143,7 @@ public class WindowHome extends javax.swing.JFrame {
 
     private void btnSellActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSellActionPerformed
         // TODO add your handling code here:
-        WindowSell nextWindow = new WindowSell(bank, server, client);
+        WindowSell nextWindow = new WindowSell(account, server, client);
         this.setVisible(false);
         nextWindow.setVisible(true);
         this.dispose();
@@ -143,7 +151,7 @@ public class WindowHome extends javax.swing.JFrame {
 
     private void btnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyActionPerformed
         // TODO add your handling code here:
-        WindowListItem nextWindow = new WindowListItem(bank, server, client);
+        WindowListItem nextWindow = new WindowListItem(account, server, client);
         this.setVisible(false);
         nextWindow.setVisible(true);
         this.dispose();
@@ -155,7 +163,7 @@ public class WindowHome extends javax.swing.JFrame {
 
     private void btnFollowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFollowActionPerformed
         // TODO add your handling code here:
-        WindowFollow nextWindow = new WindowFollow(bank, server, client);
+        WindowFollow nextWindow = new WindowFollow(account, server, client);
         this.setVisible(false);
         nextWindow.setVisible(true);
         this.dispose();
@@ -196,6 +204,7 @@ public class WindowHome extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new WindowHome().setVisible(true);
             }

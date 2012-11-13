@@ -4,6 +4,7 @@
  */
 package tradinggui;
 
+import se.kth.id2212.bankrmi.AccountImpl;
 import se.kth.id2212.bankrmi.Bank;
 import tradingpf.Item;
 import tradingpf.MarketImpl;
@@ -14,7 +15,7 @@ import tradingpf.TraderImpl;
  */
 public class WindowItem extends javax.swing.JFrame {
 
-    private Bank bank;
+    private AccountImpl account;
     private MarketImpl server;
     private TraderImpl client;
     private Item item;
@@ -25,9 +26,9 @@ public class WindowItem extends javax.swing.JFrame {
         initComponents();
     }
 
-    public WindowItem(Bank bank, MarketImpl server, TraderImpl client, Item item) {
+    public WindowItem(AccountImpl account, MarketImpl server, TraderImpl client, Item item) {
         initComponents();
-        this.bank = bank;
+        this.account = account;
         this.server = server;
         this.client = client;
         this.item = item;
@@ -168,7 +169,7 @@ public class WindowItem extends javax.swing.JFrame {
 
     private void btnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyActionPerformed
         // TODO add your handling code here:
-        WindowHome nextWindow = new WindowHome(bank, server, client);
+        WindowHome nextWindow = new WindowHome(account, server, client);
         nextWindow.setVisible(true);
         this.setVisible(false);
         this.dispose();
@@ -176,7 +177,7 @@ public class WindowItem extends javax.swing.JFrame {
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
-        WindowHome nextWindow = new WindowHome(bank, server, client);
+        WindowHome nextWindow = new WindowHome(account, server, client);
         nextWindow.setVisible(true);
         this.setVisible(false);
         this.dispose();
