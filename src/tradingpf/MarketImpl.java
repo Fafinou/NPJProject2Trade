@@ -79,7 +79,8 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
         Wish toAdd = new Wish(follower, itemName, itemPrice);
         this.wishesList.add(toAdd);
         if (wishFound(toAdd)) {
-            follower.notifyAvailable(itemName);
+            registeredClients.get(((TraderImpl)follower).getName()).notifyAvailable(itemName);
+            //follower.notifyAvailable(itemName);
         }
     }
 

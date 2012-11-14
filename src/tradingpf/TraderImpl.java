@@ -4,6 +4,8 @@
  */
 package tradingpf;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import se.kth.id2212.bankrmi.Account;
@@ -17,19 +19,21 @@ import tradinggui.WindowAvailableNotify;
 public class TraderImpl implements TraderItf, Serializable{
 
     private String clientName;
-    private Account clientBankAccount;
     private Bank bankServer;
     private MarketItf tradePfServer;
 
 
-    public TraderImpl(String clientName, Account clientBankAccount) {
+    public TraderImpl(String clientName) {
         this.clientName = clientName;
-        this.clientBankAccount = clientBankAccount;
+        //this.clientBankAccount = clientBankAccount;
     }
 
-    public Account getClientBankAccount() {
-        return clientBankAccount;
+    
+    public void main(){
+        //TraderImpl trader = new TraderImpl(clientName, clientBankAccount)
     }
+
+
         @Override
     public void notifyBuy(String itemName) throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet.");

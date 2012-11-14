@@ -4,7 +4,11 @@
  */
 package tradinggui;
 
+import java.net.MalformedURLException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Account;
 import se.kth.id2212.bankrmi.Bank;
 import se.kth.id2212.bankrmi.RejectedException;
@@ -119,13 +123,13 @@ public class WindowAccount extends javax.swing.JFrame {
             System.out.println("Error, empty name");
             System.exit(1);
         }
-        try {
-            client = new TraderImpl(clientName, bank.getAccount(clientName));
-        } catch (RemoteException ex) {
-            System.out.println(ex);
-        }
+        client = new TraderImpl(clientName);
         Account account = null;
-        account = ((TraderImpl)client).getClientBankAccount();
+        try {
+            account = bank.getAccount(clientName);
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowAccount.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if(account == null){
             System.err.println("no account !!");
             System.exit(1);
@@ -157,19 +161,30 @@ public class WindowAccount extends javax.swing.JFrame {
         }
         try {
             //Create a new account and make a 100$ deposit on it. Yes, we are nice guys ;)
-            client = new TraderImpl(clientName, bank.newAccount(clientName));
-            ((TraderImpl)client).getClientBankAccount().deposit(100);
+            Account clientAccount = bank.newAccount(clientName);
+            client = new TraderImpl(clientName);
+            clientAccount.deposit(100);
+            UnicastRemoteObject.exportObject(client);
+            try {
+                java.rmi.Naming.rebind(clientName, client);
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(WindowAccount.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (RemoteException ex) {
             System.out.println(ex);
         } catch (RejectedException ex) {
             System.out.println(ex);
         }
         
-        WindowRegister nextWindow = 
-                new WindowRegister(((TraderImpl)client).getClientBankAccount(), 
-                                    server, 
-                                    client, 
-                                    clientName);
+        WindowRegister nextWindow = null;
+        try {
+            nextWindow = new WindowRegister(bank.getAccount(clientName), 
+                                             server, 
+                                             client, 
+                                             clientName);
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowAccount.class.getName()).log(Level.SEVERE, null, ex);
+        }
         nextWindow.setVisible(true);
         this.setVisible(false);
         this.dispose();

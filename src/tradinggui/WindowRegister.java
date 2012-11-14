@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Account;
 import se.kth.id2212.bankrmi.RejectedException;
 import tradingpf.MarketItf;
+import tradingpf.TraderImpl;
 import tradingpf.TraderItf;
 
 /**
