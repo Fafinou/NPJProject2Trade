@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Account;
 import tradingpf.MarketItf;
+import tradingpf.TraderImpl;
 import tradingpf.TraderItf;
 
 /**
@@ -38,6 +39,7 @@ public class WindowHome extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             Logger.getLogger(WindowHome.class.getName()).log(Level.SEVERE, null, ex);
         }
+        clientNameLabel.setText(((TraderImpl) client).getName());   
     }
     
 
@@ -56,6 +58,7 @@ public class WindowHome extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         accountLabel = new javax.swing.JLabel();
         btnFollow = new javax.swing.JButton();
+        clientNameLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -91,13 +94,14 @@ public class WindowHome extends javax.swing.JFrame {
             }
         });
 
+        clientNameLabel.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnBuy)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnSell)
@@ -113,7 +117,12 @@ public class WindowHome extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnUnregister)
                                     .addComponent(btnFollow))))
-                        .addGap(5, 5, 5)))
+                        .addGap(5, 5, 5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(clientNameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBuy)))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -122,7 +131,9 @@ public class WindowHome extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnBuy)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnBuy)
+                            .addComponent(clientNameLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSell)
                         .addGap(12, 12, 12)
@@ -215,6 +226,7 @@ public class WindowHome extends javax.swing.JFrame {
     private javax.swing.JButton btnFollow;
     private javax.swing.JButton btnSell;
     private javax.swing.JButton btnUnregister;
+    private javax.swing.JLabel clientNameLabel;
     private javax.swing.JLabel jLabel4;
     // End of variables declaration//GEN-END:variables
 }

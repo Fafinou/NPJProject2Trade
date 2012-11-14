@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import se.kth.id2212.bankrmi.Account;
@@ -51,27 +52,24 @@ public class WindowListItem extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             Logger.getLogger(WindowListItem.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String items[] = new String[nbItem] ;
-        Integer i = 0;
         Item currentItem;
         ArrayList<Item> itemList = new ArrayList<Item>();
+        String displayItem = null;
         try {
              itemList = server.getItemList(); 
         } catch (RemoteException ex) {
             Logger.getLogger(WindowListItem.class.getName()).log(Level.SEVERE, null, ex);
         }
+        DefaultListModel model = new DefaultListModel();
         for (Iterator<Item> it = itemList.iterator(); it.hasNext();) {
             currentItem = it.next();
-            items[i] = (currentItem.getName()).concat(
-                     Integer.toString(currentItem.getPrice()));
-            i ++;
+            displayItem = (currentItem.getName()).concat("     ");
+            displayItem = displayItem.concat(Integer.toString(currentItem.getPrice()));
+            displayItem = displayItem.concat ("     ");
+            displayItem = displayItem.concat(currentItem.getSellerName());            
+            model.addElement(displayItem);
         }
-        JList list= new JList(items);
-        /* AFFICHER  LA LISTE */
-        //list.setVisible(true);
-        //this.add(new JScrollPane(list));
-        //this.pack();
-        //this.setVisible(true);
+        jList1.setModel(model);
     }
 
     /**
@@ -84,6 +82,9 @@ public class WindowListItem extends javax.swing.JFrame {
     private void initComponents() {
 
         btnCancel = new javax.swing.JButton();
+        btnBuy = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -94,20 +95,43 @@ public class WindowListItem extends javax.swing.JFrame {
             }
         });
 
+        btnBuy.setText("Buy an item");
+        btnBuy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuyActionPerformed(evt);
+            }
+        });
+
+        jList1.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jList1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(253, 253, 253)
-                .addComponent(btnCancel)
-                .addContainerGap(87, Short.MAX_VALUE))
+                .addGap(62, 62, 62)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnBuy)
+                        .addGap(119, 119, 119)
+                        .addComponent(btnCancel)))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(258, Short.MAX_VALUE)
-                .addComponent(btnCancel)
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCancel)
+                    .addComponent(btnBuy))
                 .addContainerGap())
         );
 
@@ -121,6 +145,14 @@ public class WindowListItem extends javax.swing.JFrame {
         nextWindow.setVisible(true);
         this.dispose();               
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        WindowBuy nextWindow = new WindowBuy(account, server, client);
+        nextWindow.setVisible(true);
+        this.dispose();   
+    }//GEN-LAST:event_btnBuyActionPerformed
 
     /**
      * @param args the command line arguments
@@ -158,6 +190,9 @@ public class WindowListItem extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuy;
     private javax.swing.JButton btnCancel;
+    private javax.swing.JList jList1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

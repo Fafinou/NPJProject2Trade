@@ -18,7 +18,7 @@ public interface MarketItf extends Remote {
     public void register(String name, TraderItf client) throws RemoteException, RejectedException;
     public void unregister(String name) throws RemoteException;
     public void sell(Item item) throws RemoteException;
-    public void buy(String name, Item item) throws RemoteException;
+    public void buy(String lientName, Item item) throws RemoteException;
     public void inspect() throws RemoteException;
     public void wish(TraderItf follower, String itemName, Integer itemPrice) throws RemoteException;
     public Integer getNumberItem()throws RemoteException;

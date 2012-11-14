@@ -136,10 +136,10 @@ public class WindowSell extends javax.swing.JFrame {
 
     private void btnSellActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSellActionPerformed
         // TODO add your handling code here::
-        String itemName = nameTextField.getText();
+        String itemName = nameTextField.getText().trim();
         Integer price = 0;
         try {
-            price =  Integer.parseInt(priceTextField.getText());
+            price =  Integer.parseInt(priceTextField.getText().trim());
         } catch (NumberFormatException ex) {
             System.err.println("Error : Price is not an integer");
             System.exit(1);
