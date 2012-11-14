@@ -45,4 +45,13 @@ public class Item implements Serializable {
         this.sellerName = sellerName;
     }
     
+    @Override
+    public boolean equals(Object item) {
+        if (item instanceof Item) {
+        return (((this.name).equals(((Item)item).name)) &&
+                (this.price.equals(((Item)item).price)) &&
+                ((this.sellerName).equals(((Item)item).sellerName))); 
+        } 
+        return false;
+    }
 }

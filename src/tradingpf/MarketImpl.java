@@ -66,7 +66,30 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
     @Override
     public void buy(String clientName, Item item) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        /* Remove item of itemList*/
+        itemList.remove(itemList.indexOf(item));
+        
+        /* Payment */
+        String sellerName = item.getSellerName();
+        Account clientAccount = null;
+        Account sellerAccount = null;
+        try {        
+            clientAccount = bank.getAccount(clientName);
+            sellerAccount = bank.getAccount(sellerName);
+        } catch (Exception ex) {
+            Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Integer price = item.getPrice();
+        try {        
+            clientAccount.withdraw(price);
+            sellerAccount.deposit(price);
+        } catch (RejectedException ex) {
+            Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        /* Notify to the seller */
+        TraderItf seller = registeredClients.get(sellerName);    
+        //seller.notifyBuy(sellerName);
     }
 
     @Override

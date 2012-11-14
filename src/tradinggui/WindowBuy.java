@@ -4,31 +4,32 @@
  */
 package tradinggui;
 
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Account;
 import tradingpf.*;
 /**
  *
  * @author zoe
  */
-public class WindowItem extends javax.swing.JFrame {
+public class WindowBuy extends javax.swing.JFrame {
 
     private Account account;
     private MarketItf server;
     private TraderItf client;
-    private Item item;
 
     
     
-    public WindowItem() {
+    public WindowBuy() {
         initComponents();
     }
 
-    public WindowItem(Account account, MarketItf server, TraderItf client, Item item) {
+    public WindowBuy(Account account, MarketItf server, TraderItf client) {
         initComponents();
         this.account = account;
         this.server = server;
         this.client = client;
-        this.item = item;
     }
     
     
@@ -52,12 +53,14 @@ public class WindowItem extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         itemPrice = new javax.swing.JLabel();
         btnBuy = new javax.swing.JButton();
-        itemName1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        itemPrice1 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnCancel = new javax.swing.JButton();
+        textFieldName = new javax.swing.JTextField();
+        textFieldPrice = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        textFieldSeller = new javax.swing.JTextField();
 
         followButton.setText("Follow");
         followButton.addActionListener(new java.awt.event.ActionListener() {
@@ -90,11 +93,7 @@ public class WindowItem extends javax.swing.JFrame {
             }
         });
 
-        itemName1.setText("jLabel1");
-
         jLabel5.setText("Item :");
-
-        itemPrice1.setText("jLabel1");
 
         jLabel1.setText("Name :");
 
@@ -107,6 +106,8 @@ public class WindowItem extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Seller :");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -118,19 +119,24 @@ public class WindowItem extends javax.swing.JFrame {
                         .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel1))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(itemPrice1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(itemName1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnBuy, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(62, 62, 62)
-                                .addComponent(btnCancel))))
+                                .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(textFieldSeller))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel1))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(textFieldPrice, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                                        .addComponent(textFieldName))))))
                     .addComponent(jLabel5))
-                .addGap(0, 128, Short.MAX_VALUE))
+                .addGap(0, 114, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,13 +145,17 @@ public class WindowItem extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(itemName1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(textFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(itemPrice1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                    .addComponent(jLabel2)
+                    .addComponent(textFieldPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(textFieldSeller, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBuy)
                     .addComponent(btnCancel))
@@ -166,6 +176,22 @@ public class WindowItem extends javax.swing.JFrame {
 
     private void btnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyActionPerformed
         // TODO add your handling code here:
+        String name = textFieldName.getText().trim();
+        Integer price = 0;
+        try {
+            price = Integer.parseInt(textFieldPrice.getText().trim());
+        } catch (Exception ex) {
+            System.err.println("Error : price is not an Integer");
+            System.exit(1);
+        }
+        String seller = (textFieldSeller.getText()).trim();
+        Item item = new Item(name, price, seller);
+        String clientName = ((TraderImpl)client).getName();
+        try {      
+            server.buy(clientName, item);
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowBuy.class.getName()).log(Level.SEVERE, null, ex);
+        }
         WindowHome nextWindow = new WindowHome(account, server, client);
         nextWindow.setVisible(true);
         this.setVisible(false);
@@ -197,13 +223,13 @@ public class WindowItem extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(WindowItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(WindowBuy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(WindowItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(WindowBuy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(WindowItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(WindowBuy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(WindowItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(WindowBuy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -211,7 +237,7 @@ public class WindowItem extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new WindowItem().setVisible(true);
+                new WindowBuy().setVisible(true);
             }
         });
     }
@@ -221,13 +247,15 @@ public class WindowItem extends javax.swing.JFrame {
     private javax.swing.JButton buyButton;
     private javax.swing.JButton followButton;
     private javax.swing.JLabel itemName;
-    private javax.swing.JLabel itemName1;
     private javax.swing.JLabel itemPrice;
-    private javax.swing.JLabel itemPrice1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField priceTextField;
+    private javax.swing.JTextField textFieldName;
+    private javax.swing.JTextField textFieldPrice;
+    private javax.swing.JTextField textFieldSeller;
     // End of variables declaration//GEN-END:variables
 }
