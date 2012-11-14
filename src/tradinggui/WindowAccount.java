@@ -123,8 +123,19 @@ public class WindowAccount extends javax.swing.JFrame {
             System.out.println("Error, empty name");
             System.exit(1);
         }
-        client = new TraderImpl(clientName);
+        try {
+            client = new TraderImpl(clientName);
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowAccount.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Account account = null;
+        /*
+        try {
+            UnicastRemoteObject.exportObject(client);
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowAccount.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        */
         try {
             account = bank.getAccount(clientName);
         } catch (RemoteException ex) {
@@ -164,7 +175,7 @@ public class WindowAccount extends javax.swing.JFrame {
             Account clientAccount = bank.newAccount(clientName);
             client = new TraderImpl(clientName);
             clientAccount.deposit(100);
-            UnicastRemoteObject.exportObject(client);
+            //UnicastRemoteObject.exportObject(client);
             try {
                 java.rmi.Naming.rebind(clientName, client);
             } catch (MalformedURLException ex) {

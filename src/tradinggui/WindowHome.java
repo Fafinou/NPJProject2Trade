@@ -168,7 +168,15 @@ public class WindowHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuyActionPerformed
 
     private void btnUnregisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnregisterActionPerformed
-        // TODO add your handling code here:
+        WindowConfig nextWindow = new WindowConfig();
+        try {
+            server.unregister(((TraderImpl)client).getName());
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowHome.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        nextWindow.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnUnregisterActionPerformed
 
     private void btnFollowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFollowActionPerformed

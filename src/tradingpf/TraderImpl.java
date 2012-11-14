@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import se.kth.id2212.bankrmi.Account;
 import se.kth.id2212.bankrmi.Bank;
 import tradinggui.WindowAvailableNotify;
@@ -16,22 +17,17 @@ import tradinggui.WindowAvailableNotify;
  *
  * @author fingolfin
  */
-public class TraderImpl implements TraderItf, Serializable{
+public class TraderImpl extends UnicastRemoteObject implements TraderItf{
 
     private String clientName;
     private Bank bankServer;
     private MarketItf tradePfServer;
 
 
-    public TraderImpl(String clientName) {
-        this.clientName = clientName;
-        //this.clientBankAccount = clientBankAccount;
+    public TraderImpl(String clientName) throws RemoteException{
+        this.clientName = clientName;        
     }
 
-    
-    public void main(){
-        //TraderImpl trader = new TraderImpl(clientName, clientBankAccount)
-    }
 
 
         @Override
@@ -41,9 +37,10 @@ public class TraderImpl implements TraderItf, Serializable{
 
     @Override
     public synchronized void notifyAvailable(String itemName) throws RemoteException {
-        //WindowAvailableNotify popUp = new WindowAvailableNotify(itemName);
-        //popUp.setVisible(true);
         System.out.println("item : " + itemName + "Available");
+        WindowAvailableNotify popUp = new WindowAvailableNotify(itemName);
+        popUp.setVisible(true);
+        popUp.setAlwaysOnTop(true);
     }
     
     public String getName() {

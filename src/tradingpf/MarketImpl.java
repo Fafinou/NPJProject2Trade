@@ -54,8 +54,20 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     }
 
     @Override
-    public void unregister(String name) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public synchronized void unregister(String name) throws RemoteException {
+        registeredClients.remove(name);
+        for (Iterator<Wish> it = wishesList.iterator(); it.hasNext();) {
+            Wish wish = it.next();
+            if (name.equals(((TraderImpl)wish.getFollower()).getName())){
+                wishesList.remove(wishesList.indexOf(wish));
+            }
+        }
+        for (Iterator<Item> it = itemList.iterator(); it.hasNext();) {
+            Item item = it.next();
+            if(item.getSellerName().equals(name)){
+                itemList.remove(itemList.indexOf(item));
+            }
+        }
     }
 
     @Override
@@ -65,7 +77,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     }
 
     @Override
-    public void buy(String clientName, Item item) throws RemoteException {
+    public synchronized void buy(String clientName, Item item) throws RemoteException {
         /* Remove item of itemList*/
         itemList.remove(itemList.indexOf(item));
         
@@ -102,8 +114,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
         Wish toAdd = new Wish(follower, itemName, itemPrice);
         this.wishesList.add(toAdd);
         if (wishFound(toAdd)) {
-            registeredClients.get(((TraderImpl)follower).getName()).notifyAvailable(itemName);
-            //follower.notifyAvailable(itemName);
+            follower.notifyAvailable(itemName);
         }
     }
 
