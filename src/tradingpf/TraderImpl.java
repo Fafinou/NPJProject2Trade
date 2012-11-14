@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import se.kth.id2212.bankrmi.Account;
 import se.kth.id2212.bankrmi.Bank;
+import tradinggui.WindowAvailableNotify;
 
 /**
  *
@@ -35,8 +36,10 @@ public class TraderImpl implements TraderItf, Serializable{
     }
 
     @Override
-    public void notifyAvailable(String itemName) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public synchronized void notifyAvailable(String itemName) throws RemoteException {
+        //WindowAvailableNotify popUp = new WindowAvailableNotify(itemName);
+        //popUp.setVisible(true);
+        System.out.println("item : " + itemName + "Available");
     }
     
     public String getName() {

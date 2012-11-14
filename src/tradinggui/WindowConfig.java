@@ -4,8 +4,6 @@
  */
 package tradinggui;
 
-import com.sun.xml.internal.bind.util.Which;
-import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import se.kth.id2212.bankrmi.Bank;

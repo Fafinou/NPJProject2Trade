@@ -4,6 +4,9 @@
  */
 package tradinggui;
 
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Account;
 import tradingpf.MarketItf;
 import tradingpf.TraderItf;
@@ -124,6 +127,14 @@ public class WindowFollow extends javax.swing.JFrame {
 
     private void btnFollowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFollowActionPerformed
         // TODO add your handling code here:
+        String articleName = textFieldName.getText();
+        Integer articlePrice = Integer.parseInt(textFieldPrice.getText());
+        try {
+            server.wish(client, articleName, articlePrice);
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowFollow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         WindowHome nextWindow = new WindowHome(account, server, client);
         nextWindow.setVisible(true);
         this.setVisible(false);

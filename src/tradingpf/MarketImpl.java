@@ -24,7 +24,7 @@ import se.kth.id2212.bankrmi.RejectedException;
  * @author fingolfin
  */
 public class MarketImpl extends UnicastRemoteObject implements MarketItf {
-    
+
     private Bank bank;
     private String bankName;
     private Map<String, TraderItf> registeredClients;
@@ -49,7 +49,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     }
 
     @Override
-    public void register(String name, TraderItf client) throws RemoteException, RejectedException {
+    public synchronized void register(String name, TraderItf client) throws RemoteException, RejectedException {
         registeredClients.put(name, client);
     }
 
@@ -59,8 +59,9 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     }
 
     @Override
-    public void sell(Item item) throws RemoteException {
-        itemList.add(item) ;
+    public synchronized void sell(Item item) throws RemoteException {
+        itemList.add(item);
+        lookupFollower(item);
     }
 
     @Override
@@ -97,41 +98,55 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     }
 
     @Override
-    public void wish(TraderItf follower, String itemName, Integer itemPrice) throws RemoteException {
+    public synchronized void wish(TraderItf follower, String itemName, Integer itemPrice) throws RemoteException {
         Wish toAdd = new Wish(follower, itemName, itemPrice);
         this.wishesList.add(toAdd);
-        if (wishFound(toAdd)){
+        if (wishFound(toAdd)) {
             follower.notifyAvailable(itemName);
         }
-        
     }
-    
-    /* renvoi si le client est enregistré ou pas
-     * public boolean register(String name) {
-     * 
-     * }
-     */
-    
 
     /*
-     * public Iterator<Item> getItemList() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }*/
+     * renvoi si le client est enregistré ou pas public boolean register(String
+     * name) {
+     *
+     * }
+     */
+    /*
+     * public Iterator<Item> getItemList() { throw new
+     * UnsupportedOperationException("Not supported yet."); }
+     */
+    private boolean wishFound(Wish wish) {
+        for (Iterator<Item> it = itemList.iterator(); it.hasNext();) {
+            Item item = it.next();
+            if (item.getName().equals(wish.getObjectName())) {
+                if (item.getPrice() <= wish.getObjectPrice()) {
+                    return true;
+                }
+            }
 
-
-    private boolean wishFound(Wish wish){
-        Iterator<Item> iter = this.itemList.iterator();
-        //iterate over the arraylist to find a match
+        }
         return false;
     }
-    
+
+    private void lookupFollower(Item item) throws RemoteException {
+        for (Iterator<Wish> it = wishesList.iterator(); it.hasNext();) {
+            Wish wish = it.next();
+            if (wish.getObjectName().equals(item.getName())) {
+                if (wish.getObjectPrice() >= item.getPrice()) {
+                    wish.getFollower().notifyAvailable(item.getName());
+                }
+            }
+        }
+    }
+
     @Override
-    public Integer getNumberItem()throws RemoteException {
+    public Integer getNumberItem() throws RemoteException {
         return itemList.size();
     }
-    
+
     @Override
-     public ArrayList<Item> getItemList() throws RemoteException {
+    public ArrayList<Item> getItemList() throws RemoteException {
         return itemList;
 
     }
