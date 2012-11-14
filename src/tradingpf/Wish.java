@@ -14,14 +14,24 @@ public class Wish implements Serializable{
     private TraderItf follower;
     private String objectName;
     private Integer objectPrice;
+    private String followerName;
 
-    public Wish(TraderItf follower, String objectName, Integer objectPrice) {
+    public Wish(TraderItf follower, String followerName, String objectName, Integer objectPrice) {
         this.follower = follower;
         this.objectName = objectName;
         this.objectPrice = objectPrice;
+        this.followerName = followerName;
     }
 
+    public String getFollowerName() {
+        return followerName;
+    }
 
+    public void setFollowerName(String followerName) {
+        this.followerName = followerName;
+    }
+
+    
     public TraderItf getFollower() {
         return follower;
     }

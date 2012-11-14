@@ -20,7 +20,7 @@ public interface MarketItf extends Remote {
     public void sell(Item item) throws RemoteException;
     public void buy(String lientName, Item item) throws RemoteException;
     public void inspect() throws RemoteException;
-    public void wish(TraderItf follower, String itemName, Integer itemPrice) throws RemoteException;
+    public void wish(TraderItf follower, String followerName, String itemName, Integer itemPrice) throws RemoteException;
     public Integer getNumberItem()throws RemoteException;
     public ArrayList<Item> getItemList() throws RemoteException;
 }

@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Account;
 import tradingpf.MarketItf;
+import tradingpf.TraderImpl;
 import tradingpf.TraderItf;
 
 /**
@@ -130,7 +131,10 @@ public class WindowFollow extends javax.swing.JFrame {
         String articleName = textFieldName.getText();
         Integer articlePrice = Integer.parseInt(textFieldPrice.getText());
         try {
-            server.wish(client, articleName, articlePrice);
+            server.wish(client, 
+                    ((TraderImpl)client).getName(), 
+                    articleName, 
+                    articlePrice);
         } catch (RemoteException ex) {
             Logger.getLogger(WindowFollow.class.getName()).log(Level.SEVERE, null, ex);
         }
