@@ -19,6 +19,7 @@ import se.kth.id2212.bankrmi.RejectedException;
 
 /**
  * Implementation of the market.
+ *
  * @author Zoé Bellot
  * @author Simon Cathébras
  */
@@ -33,9 +34,10 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
     /**
      * Creates a new market implementation.
+     *
      * @param marketName Name of the newly created market
      * @param bankName Name of the bank used for account management. Must exist.
-     * @throws RemoteException 
+     * @throws RemoteException
      */
     public MarketImpl(String marketName, String bankName) throws RemoteException {
         this.bankName = bankName;
@@ -63,13 +65,13 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
         registeredClients.remove(name);
         for (Iterator<Wish> it = wishesList.iterator(); it.hasNext();) {
             Wish wish = it.next();
-            if (name.equals(wish.getFollowerName())){
+            if (name.equals(wish.getFollowerName())) {
                 wishesList.remove(wishesList.indexOf(wish));
             }
         }
         for (Iterator<Item> it = itemList.iterator(); it.hasNext();) {
             Item item = it.next();
-            if(item.getSellerName().equals(name)){
+            if (item.getSellerName().equals(name)) {
                 itemList.remove(itemList.indexOf(item));
             }
         }
@@ -83,30 +85,40 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
     @Override
     public synchronized void buy(String clientName, Item item) throws RemoteException {
-        /* Remove item of itemList*/
-        itemList.remove(itemList.indexOf(item));
-        
-        /* Payment */
+        /*
+         * Payment
+         */
         String sellerName = item.getSellerName();
         Account clientAccount = null;
         Account sellerAccount = null;
-        try {        
+        try {
             clientAccount = bank.getAccount(clientName);
             sellerAccount = bank.getAccount(sellerName);
         } catch (Exception ex) {
             Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         Integer price = item.getPrice();
-        try {        
-            clientAccount.withdraw(price);
-            sellerAccount.deposit(price);
-        } catch (RejectedException ex) {
-            Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+        if (clientAccount.getBalance() < price) {
+            //the client do not have enough money.
+            registeredClients.get(clientName).notifyNotEnoughMoney();
+        } else {
+            try {
+                clientAccount.withdraw(price);
+                sellerAccount.deposit(price);
+            } catch (RejectedException ex) {
+                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            /*
+             * Remove item of itemList
+             */
+            itemList.remove(itemList.indexOf(item));
+            /*
+             * Notify to the seller
+             */
+            TraderItf seller = registeredClients.get(sellerName);
+            seller.notifyBuy(item.getName());
         }
-        
-        /* Notify to the seller */
-        TraderItf seller = registeredClients.get(sellerName);    
-        seller.notifyBuy(item.getName());
     }
 
     @Override
@@ -116,7 +128,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
     @Override
     public synchronized void wish(TraderItf follower, String followerName, String itemName, Integer itemPrice) throws RemoteException {
-        Wish toAdd = new Wish(follower,followerName, itemName, itemPrice);
+        Wish toAdd = new Wish(follower, followerName, itemName, itemPrice);
         this.wishesList.add(toAdd);
         if (wishFound(toAdd)) {
             follower.notifyAvailable(itemName);
