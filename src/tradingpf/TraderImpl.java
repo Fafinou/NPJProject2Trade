@@ -38,7 +38,7 @@ public class TraderImpl extends UnicastRemoteObject implements TraderItf{
     @Override
     public synchronized void notifyAvailable(String itemName) throws RemoteException {
         System.out.println("item : " + itemName + "Available");
-        WindowAvailableNotify popUp = new WindowAvailableNotify(itemName);
+        WindowAvailableNotify popUp = new WindowAvailableNotify(itemName, clientName);
         popUp.setVisible(true);
         popUp.setAlwaysOnTop(true);
     }

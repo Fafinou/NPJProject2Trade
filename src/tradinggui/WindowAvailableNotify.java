@@ -21,9 +21,10 @@ public class WindowAvailableNotify extends javax.swing.JFrame {
     }
     
     
-    public WindowAvailableNotify(String name) {
+    public WindowAvailableNotify(String itemName, String clientName) {
         initComponents();
-        itemLabel.setText(name);
+        itemLabel.setText(itemName);
+        clientNameLabel.setText(clientName);
     }
 
     /**
@@ -39,6 +40,7 @@ public class WindowAvailableNotify extends javax.swing.JFrame {
         itemLabel = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         btnOk = new javax.swing.JButton();
+        clientNameLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,12 +57,16 @@ public class WindowAvailableNotify extends javax.swing.JFrame {
             }
         });
 
+        clientNameLabel.setText("jLabel2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(113, 113, 113)
+                .addGap(20, 20, 20)
+                .addComponent(clientNameLabel)
+                .addGap(44, 44, 44)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(itemLabel)
@@ -75,10 +81,15 @@ public class WindowAvailableNotify extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(itemLabel))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(itemLabel)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(clientNameLabel)))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
@@ -132,6 +143,7 @@ public class WindowAvailableNotify extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOk;
+    private javax.swing.JLabel clientNameLabel;
     private javax.swing.JLabel itemLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
