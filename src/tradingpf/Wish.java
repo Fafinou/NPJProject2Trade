@@ -8,7 +8,8 @@ import java.io.Serializable;
 
 /**
  *
- * @author fingolfin
+ * @author Zoé Bellot
+ * @author Simon Cathébras
  */
 public class Wish implements Serializable{
     private TraderItf follower;
@@ -16,6 +17,13 @@ public class Wish implements Serializable{
     private Integer objectPrice;
     private String followerName;
 
+    /**
+     * Creates a new wish.
+     * @param follower Interface of the wisher
+     * @param followerName Name of the wisher
+     * @param objectName Name of the object
+     * @param objectPrice Price of the object
+     */
     public Wish(TraderItf follower, String followerName, String objectName, Integer objectPrice) {
         this.follower = follower;
         this.objectName = objectName;

@@ -18,8 +18,9 @@ import se.kth.id2212.bankrmi.Bank;
 import se.kth.id2212.bankrmi.RejectedException;
 
 /**
- *
- * @author fingolfin
+ * Implementation of the market.
+ * @author Zoé Bellot
+ * @author Simon Cathébras
  */
 public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
@@ -30,6 +31,12 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     private ArrayList<Item> itemList;
     private String marketName;
 
+    /**
+     * Creates a new market implementation.
+     * @param marketName Name of the newly created market
+     * @param bankName Name of the bank used for account management. Must exist.
+     * @throws RemoteException 
+     */
     public MarketImpl(String marketName, String bankName) throws RemoteException {
         this.bankName = bankName;
         try {
