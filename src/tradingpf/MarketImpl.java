@@ -101,7 +101,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
         
         /* Notify to the seller */
         TraderItf seller = registeredClients.get(sellerName);    
-        //seller.notifyBuy(sellerName);
+        seller.notifyBuy(item.getName());
     }
 
     @Override
