@@ -6,7 +6,7 @@ package tradinggui;
 
 /**
  *
- * @author zoe
+ * @author Simon Cathébras and Zoé Bellot
  */
 public class WindowAvailableNotify extends javax.swing.JFrame {
 
@@ -20,7 +20,12 @@ public class WindowAvailableNotify extends javax.swing.JFrame {
         initComponents();
     }
     
-    
+    /**
+     * Creates new form WindowAvailableNotify
+     * 
+     * @param itemName : the name of the available item
+     * @param clientName : the name of the client who followed the item
+     */
     public WindowAvailableNotify(String itemName, String clientName) {
         initComponents();
         itemLabel.setText(itemName);

@@ -11,7 +11,7 @@ import se.kth.id2212.bankrmi.Account;
 import tradingpf.*;
 /**
  *
- * @author zoe
+ * @author Simon Cathébras and Zoé Bellot
  */
 public class WindowBuy extends javax.swing.JFrame {
 
@@ -20,11 +20,20 @@ public class WindowBuy extends javax.swing.JFrame {
     private TraderItf client;
 
     
-    
+    /**
+     * Creates new form WindowBuy
+     */
     public WindowBuy() {
         initComponents();
     }
 
+    /**
+     * Creates new form WindowBuy
+     * 
+     * @param account : the account of the client 
+     * @param server :  the market
+     * @param client : the client
+     */
     public WindowBuy(Account account, MarketItf server, TraderItf client) {
         initComponents();
         this.account = account;

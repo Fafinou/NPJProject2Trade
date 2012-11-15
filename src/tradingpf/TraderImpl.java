@@ -12,7 +12,7 @@ import tradinggui.WindowSellNotify;
 
 /**
  *
- * @author fingolfin
+ * @author Simon Cathébras and Zoé Bellot
  */
 public class TraderImpl extends UnicastRemoteObject implements TraderItf{
 
@@ -21,10 +21,15 @@ public class TraderImpl extends UnicastRemoteObject implements TraderItf{
     private MarketItf tradePfServer;
 
 
+    /**
+     * Creates a new client
+     * 
+     * @param clientName : the name of the client
+     * @throws RemoteException 
+     */
     public TraderImpl(String clientName) throws RemoteException{
         this.clientName = clientName;        
     }
-
 
 
         @Override
@@ -41,6 +46,10 @@ public class TraderImpl extends UnicastRemoteObject implements TraderItf{
         popUp.setAlwaysOnTop(true);
     }
     
+    /**
+     * 
+     * @return the name of the client
+     */
     public String getName() {
         return clientName;
     }

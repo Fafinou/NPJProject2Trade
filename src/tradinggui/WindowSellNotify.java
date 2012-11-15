@@ -6,7 +6,7 @@ package tradinggui;
 
 /**
  *
- * @author zoe
+ * @author Simon Cathébras and Zoé Bellot
  */
 public class WindowSellNotify extends javax.swing.JFrame {
 
@@ -20,7 +20,12 @@ public class WindowSellNotify extends javax.swing.JFrame {
         initComponents();
     }
     
-    
+    /**
+     * Creates new form WindowSellNotify
+     * 
+     * @param name : the name of the item
+     * @param clientName : the name of the client
+     */
     public WindowSellNotify(String name, String clientName) {
         initComponents();
         itemLabel.setText(name);  

@@ -13,7 +13,7 @@ import tradingpf.MarketItf;
 
 /**
  *
- * @author zoe
+ * @author Simon Cathébras and Zoé Bellot
  */
 public class WindowConfig extends javax.swing.JFrame {
 
@@ -21,6 +21,7 @@ public class WindowConfig extends javax.swing.JFrame {
     private MarketItf server;
     private static final String BANK = "Nordea";
     private static final String MARKET = "Ebay";
+    
     /**
      * Creates new form WindowConfig
      */

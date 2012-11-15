@@ -18,7 +18,7 @@ import tradingpf.TraderItf;
 
 /**
  *
- * @author zoe
+ * @author Simon Cathébras and Zoé Bellot
  */
 public class WindowAccount extends javax.swing.JFrame {
 
@@ -33,7 +33,13 @@ public class WindowAccount extends javax.swing.JFrame {
         initComponents();
     }
 
-    WindowAccount(Bank bank, MarketItf server) {
+    /**
+     * Creates new form WindowAccount
+     * 
+     * @param bank : the bank of the client
+     * @param server : the market
+     */
+    public WindowAccount(Bank bank, MarketItf server) {
         initComponents();
         this.bank = bank;
         this.server = server;

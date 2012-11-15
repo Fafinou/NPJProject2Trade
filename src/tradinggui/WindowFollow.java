@@ -14,7 +14,7 @@ import tradingpf.TraderItf;
 
 /**
  *
- * @author zoe
+ * @author Simon Cathébras and Zoé Bellot
  */
 public class WindowFollow extends javax.swing.JFrame {
 
@@ -29,6 +29,13 @@ public class WindowFollow extends javax.swing.JFrame {
         initComponents();
     }
 
+    /**
+     * Creates new form WindowFollow
+     * 
+     * @param account : the account of the client
+     * @param server : the market
+     * @param client 
+     */
     public WindowFollow(Account account, MarketItf server, TraderItf client) {
         initComponents();
         this.account = account;
