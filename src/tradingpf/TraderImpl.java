@@ -4,12 +4,8 @@
  */
 package tradingpf;
 
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import se.kth.id2212.bankrmi.Account;
 import se.kth.id2212.bankrmi.Bank;
 import tradinggui.WindowAvailableNotify;
 import tradinggui.WindowSellNotify;
@@ -33,14 +29,13 @@ public class TraderImpl extends UnicastRemoteObject implements TraderItf{
 
         @Override
     public void notifyBuy(String itemName) throws RemoteException {
-        WindowSellNotify window = new WindowSellNotify(itemName);
+        WindowSellNotify window = new WindowSellNotify(itemName, clientName);
         window.setVisible(true);
         window.setAlwaysOnTop(true);
     }
 
     @Override
     public synchronized void notifyAvailable(String itemName) throws RemoteException {
-        System.out.println("item : " + itemName + "Available");
         WindowAvailableNotify popUp = new WindowAvailableNotify(itemName, clientName);
         popUp.setVisible(true);
         popUp.setAlwaysOnTop(true);
