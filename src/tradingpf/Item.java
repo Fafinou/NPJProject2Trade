@@ -8,13 +8,21 @@ import java.io.Serializable;
 
 /**
  *
- * @author fingolfin
+ * The class item records the name, the price and the seller of this item
+ * @author Zoé Bellot
+ * @author Simon Cathébras
  */
 public class Item implements Serializable {
     private String name;
     private Integer price;
     private String sellerName;
 
+    /**
+     * Creates a new Item
+     * @param name the name of the item
+     * @param price the price of the item
+     * @param sellerName the name of the item's seller
+     */
     public Item(String name, Integer price, String sellerName) {
         this.name = name;
         this.price = price;
