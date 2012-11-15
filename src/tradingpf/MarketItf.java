@@ -8,6 +8,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Vector;
 import se.kth.id2212.bankrmi.RejectedException;
 
 /**
@@ -68,5 +69,5 @@ public interface MarketItf extends Remote {
      * @return a list of all items on the platform.
      * @throws RemoteException 
      */
-    public ArrayList<Item> getItemList() throws RemoteException;
+    public Vector<Item> getItemList() throws RemoteException;
 }

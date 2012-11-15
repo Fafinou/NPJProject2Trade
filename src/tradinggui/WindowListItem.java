@@ -7,6 +7,7 @@ package tradinggui;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -60,7 +61,7 @@ public class WindowListItem extends javax.swing.JFrame {
             Logger.getLogger(WindowListItem.class.getName()).log(Level.SEVERE, null, ex);
         }
         Item currentItem;
-        ArrayList<Item> itemList = new ArrayList<Item>();
+        Vector<Item> itemList = new Vector<Item>();
         String displayItem = null;
         try {
              itemList = server.getItemList(); 
