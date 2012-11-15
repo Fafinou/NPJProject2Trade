@@ -8,6 +8,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import se.kth.id2212.bankrmi.Bank;
 import tradinggui.WindowAvailableNotify;
+import tradinggui.WindowMoneyNotify;
 import tradinggui.WindowSellNotify;
 
 /**
@@ -42,6 +43,13 @@ public class TraderImpl extends UnicastRemoteObject implements TraderItf{
     @Override
     public synchronized void notifyAvailable(String itemName) throws RemoteException {
         WindowAvailableNotify popUp = new WindowAvailableNotify(itemName, clientName);
+        popUp.setVisible(true);
+        popUp.setAlwaysOnTop(true);
+    }
+    
+    @Override
+    public void notifyNotEnoughMoney() throws RemoteException {
+        WindowMoneyNotify popUp = new WindowMoneyNotify(clientName);
         popUp.setVisible(true);
         popUp.setAlwaysOnTop(true);
     }

@@ -32,4 +32,13 @@ public interface TraderItf extends Remote{
      * @throws RemoteException 
      */
     public void notifyAvailable(String itemName) throws RemoteException;
+    
+    /**
+     * Notify the client that he have not enough money
+     * To notify the client, the function creates a pop-up 
+     * window (WindowMoneyNotify)
+     * 
+     * @throws RemoteException 
+     */
+    public void notifyNotEnoughMoney() throws RemoteException;
 }
