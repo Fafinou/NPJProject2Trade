@@ -12,7 +12,7 @@ import java.sql.Statement;
 
 /**
  *
- * @author zoe
+ * @author Simon Cathébras and Zoé Bellot
  */
 public class Database {
     
@@ -103,15 +103,28 @@ public class Database {
             statement.executeUpdate(Request);   
         }
         
-        public void insertUser(){
-            throws UnsupportedOperationException;
+        public void insertUser(String userName, String Password){
         }
         
-    private PreparedStatement removeUser;
-    private PreparedStatement getUser;
-    private PreparedStatement loginUser;
-    private PreparedStatement logoutUser;
-    private PreparedStatement updateSoldItem;
+        public void removeUser(){
+        
+        }
+        
+        public void getUser(){
+            
+        }
+        
+        public void loginUser(){
+            
+        }
+        
+        public void logoutUser(){
+            
+        }
+        
+        public void updateSoldItem(){
+            
+        }
     
     
     
