@@ -40,6 +40,7 @@ public class Database {
             createCallBack();
             createFollowedItem();
             createFollowing();
+            initOperations();
         }
      
         private void getConnection() throws SQLException, ClassNotFoundException{          
@@ -103,7 +104,7 @@ public class Database {
             statement.executeUpdate(Request);   
         }
         
-        private void initOperations() throws Exception {
+        private void initOperations() throws SQLException {
             removeUserStatement= conn.prepareStatement("");
             getUserStatement = conn.prepareStatement("");
             loginUserStatement = conn.prepareStatement("");
