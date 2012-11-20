@@ -4,7 +4,9 @@
  */
 package tradingpf;
 
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.ResultSet;
@@ -58,20 +60,20 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     @Override
     public synchronized void register(String name, String password) throws SQLException, RemoteException {
         //registeredClients.put(name, client);
-        database.insertUser(name, password);  
+        database.insertUser(name, password);
     }
-    
+
     @Override
     public synchronized boolean verifyName(String name) throws SQLException, RemoteException {
         ResultSet result = database.getUser(name);
         return (!result.next());
     }
-    
+
     @Override
     public synchronized boolean verifyPassword(String password) throws SQLException, RemoteException {
         return (password.length() > 7);
     }
-    
+
     @Override
     public synchronized boolean verifyPasswordForAUser(String name, String password) throws SQLException, RemoteException {
         ResultSet result = database.getUser(name);
@@ -80,9 +82,9 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
         } else {
             return (password.equals(result.getString("Password")));
         }
-        
+
     }
-    
+
     @Override
     public synchronized void login(String name) throws SQLException {
         database.loginUser(name); 
@@ -119,9 +121,8 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
                 }
             }
         }
-    
-    }
-    
+        }
+
     @Override
     public synchronized void unregister(String name) throws RemoteException {
         registeredClients.remove(name);
@@ -132,9 +133,9 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
                 wishesList.remove(wishesList.indexOf(wish));
             }
         }
-        
+
         Item item = null;
-        for (int i = 0; i < itemList.size();i++) {
+        for (int i = 0; i < itemList.size(); i++) {
             item = itemList.get(i);
             if (item.getSellerName().equals(name)) {
                 itemList.remove(itemList.indexOf(item));
@@ -143,46 +144,77 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     }
 
     @Override
-    public synchronized void sell(Item item) throws RemoteException {
+    public synchronized void sell(Item item, Integer amount) throws RemoteException {
         itemList.add(item);
+        try {
+            database.insertItem(
+                    item.getName(), 
+                    item.getPrice(), 
+                    amount, 
+                    item.getSellerName());
+        } catch (SQLException ex) {
+            Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         lookupFollower(item);
     }
 
     @Override
-    public synchronized void buy(String clientName, Item item) throws RemoteException {
+    public synchronized void buy(String clientName, Integer itemId) throws RemoteException {
         /*
          * Payment
          */
-        String sellerName = item.getSellerName();
+        ResultSet result = null;
         Account clientAccount = null;
         Account sellerAccount = null;
+        String sellerName = null;
+        Integer itemPrice = null;
+        String itemName = null;
+        try {
+            result = database.getItem(itemId);
+            result.next();
+            sellerName = result.getString("Seller");
+            itemPrice = result.getInt("Price");
+            itemName = result.getString("Name");
+        } catch (SQLException ex) {
+            Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             clientAccount = bank.getAccount(clientName);
             sellerAccount = bank.getAccount(sellerName);
         } catch (Exception ex) {
             Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Integer price = item.getPrice();
-        if (clientAccount.getBalance() < price) {
+        if (clientAccount.getBalance() < itemPrice) {
             //the client do not have enough money.
             registeredClients.get(clientName).notifyNotEnoughMoney();
         } else {
             try {
-                clientAccount.withdraw(price);
-                sellerAccount.deposit(price);
+                clientAccount.withdraw(itemPrice);
+                sellerAccount.deposit(itemPrice);
             } catch (RejectedException ex) {
                 Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            /*
-             * Remove item of itemList
-             */
-            itemList.remove(itemList.indexOf(item));
+            try {
+                /*
+                 * Remove item of itemList
+                 */
+                database.removeItem(itemId);
+            } catch (SQLException ex) {
+                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
             /*
              * Notify to the seller
              */
-            TraderItf seller = registeredClients.get(sellerName);
-            seller.notifyBuy(item.getName());
+            TraderItf seller = null;
+            try {
+                seller = (TraderItf) Naming.lookup(sellerName);
+            } catch (NotBoundException ex) {
+                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            seller.notifyBuy(itemName);
         }
     }
 
@@ -193,9 +225,10 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
     @Override
     public synchronized void wish(TraderItf follower, String followerName, String itemName, Integer itemPrice) throws RemoteException {
-        database.        if (wishFound(toAdd)) {
+        //database.        if (wishFound(toAdd))
+        /*{
             follower.notifyAvailable(itemName);
-        }
+        }*/
     }
 
     /*

@@ -226,7 +226,15 @@ public class WindowRegister extends javax.swing.JFrame {
             }
             try {
                 client = new TraderImpl(clientName);
+                
             } catch (RemoteException ex) {
+                Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                java.rmi.Naming.rebind(clientName, client);
+            } catch (RemoteException ex) {
+                Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (MalformedURLException ex) {
                 Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
             }
             Account account = null;

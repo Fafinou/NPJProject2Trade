@@ -57,14 +57,14 @@ public interface MarketItf extends Remote {
      * @param item Item soon to be sold.
      * @throws RemoteException 
      */
-    public void sell(Item item) throws RemoteException;
+    public void sell(Item item, Integer amount) throws RemoteException;
     /**
      * Buy an item.
      * @param clientName buyer of the item.
      * @param item Item soon to be bought.
      * @throws RemoteException 
      */
-    public void buy(String clientName, Item item) throws RemoteException;
+    public void buy(String clientName, Integer itemId) throws RemoteException;
     /**
      * Lists all the items availables on the platform.
      * @throws RemoteException 
