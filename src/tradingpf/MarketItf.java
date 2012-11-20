@@ -79,12 +79,7 @@ public interface MarketItf extends Remote {
      * @throws RemoteException 
      */
     public void wish(TraderItf follower, String followerName, String itemName, Integer itemPrice) throws RemoteException;
-    /**
-     * 
-     * @return the count of available items all over the platform.
-     * @throws RemoteException 
-     */
-    public Integer getNumberItem()throws RemoteException;
+
     /**
      * 
      * @return a list of all items on the platform.

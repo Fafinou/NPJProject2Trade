@@ -200,10 +200,6 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
         }
     }
 
-    @Override
-    public Integer getNumberItem() throws RemoteException {
-        return itemList.size();
-    }
 
     @Override
     public ResultSet getItemList() throws RemoteException{

@@ -7,13 +7,10 @@ package tradinggui;
 import java.rmi.RemoteException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import se.kth.id2212.bankrmi.Account;
-import tradingpf.Item;
 import tradingpf.MarketItf;
 import tradingpf.TraderItf;
 
@@ -55,13 +52,6 @@ public class WindowListItem extends javax.swing.JFrame {
    }
     
     private void initList() throws SQLException{
-        
-        Integer nbItem = 0;
-        try {
-            nbItem = server.getNumberItem();
-        } catch (RemoteException ex) {
-            Logger.getLogger(WindowListItem.class.getName()).log(Level.SEVERE, null, ex);
-        }
         ResultSet itemList = null;
         String displayItem = null;
         try {
