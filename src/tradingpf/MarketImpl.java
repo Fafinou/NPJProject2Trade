@@ -235,13 +235,27 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
 
     private void lookupFollower(Item item) throws RemoteException {
-        for (Iterator<Wish> it = wishesList.iterator(); it.hasNext();) {
-            Wish wish = it.next();
-            if (wish.getObjectName().equals(item.getName())) {
-                if (wish.getObjectPrice() >= item.getPrice()) {
-                    wish.getFollower().notifyAvailable(item.getName());
+        ResultSet result = null;
+        String followerName = null;
+        TraderItf client = null;
+        try {
+            result = database.getUserToNotify(item.getName(), item.getPrice());
+            while(result.next()){
+                
+                followerName = result.getString("Follower");
+                
+                try {
+                    client = (TraderItf) Naming.lookup(followerName);
+                } catch (NotBoundException ex) {
+                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
+                client.notifyAvailable(item.getName());
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
