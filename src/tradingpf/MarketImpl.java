@@ -7,10 +7,7 @@ package tradingpf;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Account;
@@ -28,8 +25,8 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     private Bank bank;
     private String bankName;
     private Map<String, TraderItf> registeredClients;
-    private ArrayList<Wish> wishesList;
-    private ArrayList<Item> itemList;
+    private Vector<Wish> wishesList;
+    private Vector<Item> itemList;
     private String marketName;
 
     /**
@@ -50,8 +47,8 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
         this.marketName = marketName;
         this.registeredClients = new HashMap<String, TraderItf>();
 
-        this.wishesList = new ArrayList<Wish>();
-        this.itemList = new ArrayList<Item>();
+        this.wishesList = new Vector<Wish>();
+        this.itemList = new Vector<Item>();
 
     }
 
@@ -63,14 +60,17 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     @Override
     public synchronized void unregister(String name) throws RemoteException {
         registeredClients.remove(name);
-        for (Iterator<Wish> it = wishesList.iterator(); it.hasNext();) {
-            Wish wish = it.next();
+        Wish wish = null;
+        for (int i = 0; i < wishesList.size(); i++) {
+            wish = wishesList.get(i);
             if (name.equals(wish.getFollowerName())) {
                 wishesList.remove(wishesList.indexOf(wish));
             }
         }
-        for (Iterator<Item> it = itemList.iterator(); it.hasNext();) {
-            Item item = it.next();
+        
+        Item item = null;
+        for (int i = 0; i < itemList.size();i++) {
+            item = itemList.get(i);
             if (item.getSellerName().equals(name)) {
                 itemList.remove(itemList.indexOf(item));
             }
@@ -175,7 +175,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     }
 
     @Override
-    public ArrayList<Item> getItemList() throws RemoteException {
+    public Vector<Item> getItemList() throws RemoteException {
         return itemList;
 
     }
