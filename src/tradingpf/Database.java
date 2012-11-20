@@ -306,11 +306,19 @@ public class Database {
         System.out.println("Table dropped, " + NoOfAffectedRows + " row(s) affected");
     }
     
+    /*
+     * 
+     * @param itemName
+     * @param priceMax
+     * @param userName
+     * @throws SQLException 
+     */
     public void insertFollowed(String itemName, Integer priceMax, String userName) throws SQLException{
         insertFollowedStatement.setString(1, itemName);
         insertFollowedStatement.setInt(2, priceMax); 
         insertFollowedStatement.executeUpdate();
         insertFollowingStatement.setString(1, itemName); 
         insertFollowingStatement.setString(2, userName); 
-        insertFollowingStatement.executeUpdate();   }
+        insertFollowingStatement.executeUpdate();
+    }
 }
