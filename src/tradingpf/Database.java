@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,6 +21,7 @@ public class Database {
 
     private Connection conn;
     private Statement statement;
+    private boolean debug = true;
     private PreparedStatement insertUserStatement;
     private PreparedStatement removeUserStatement;
     private PreparedStatement getUserStatement;
@@ -37,6 +40,9 @@ public class Database {
 
     private void createDatabase() throws SQLException, ClassNotFoundException {
         getConnection();
+        if (debug){
+            dropAllTable();
+        }
         createUser();
         createItem();
         createCallBack();
@@ -47,10 +53,21 @@ public class Database {
 
     private void getConnection() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
-        conn = DriverManager.getConnection("jdbc:mysql://localhost/Market", "id2212", "javajava");
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Market", "id2212", "javajava");
         statement = conn.createStatement();
     }
 
+    public Database() {
+        try {
+            this.createDatabase();
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+    }
+
+    
     private void createUser() throws SQLException {
         ResultSet result = conn.getMetaData().
                 getTables(null, null, "User", null);
@@ -76,11 +93,12 @@ public class Database {
         }
         String Request;
         Request = "create table Item ("
-                + "Id_Item INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY"
+                + "Id_Item INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,"
                 + "Name VARCHAR(30) NOT NULL, "
                 + "Price INTEGER NOT NULL,"
                 + "Amount INTEGER NOT NULL,"
-                + "FOREIGN KEY (Seller) REFERENCES User(Name) NOT NULL)";
+                + "Seller VARCHAR(30) NOT NULL,"
+                + "FOREIGN KEY (Seller) REFERENCES User(Name))";
         statement.executeUpdate(Request);
     }
 
@@ -92,13 +110,14 @@ public class Database {
         }
         String Request;
         Request = "create table CallBack ("
-                + "Id_CallBack INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY"
+                + "Id_CallBack INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,"
                 + "Type BOOLEAN NOT NULL, "
                 + /*
                  * Type = 0 if it is an available callback Type = 1 if it is a
                  * sold callback
                  */ "ItemName VARCHAR(30) NOT NULL,"
-                + "FOREIGN KEY (UserName) REFERENCES User(Name) NOT NULL)";
+                + "UserName VARCHAR(30) NOT NULL,"
+                + "FOREIGN KEY (UserName) REFERENCES User(Name))";
         statement.executeUpdate(Request);
     }
 
@@ -110,7 +129,7 @@ public class Database {
         }
         String Request;
         Request = "create table FollowedItem ("
-                + "Id_Item INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY"
+                + "Id_Item INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,"
                 + "Name VARCHAR(30) NOT NULL,"
                 + "PrixMax INTEGER UNSIGNED NOT NULL)";
         statement.executeUpdate(Request);
@@ -124,8 +143,10 @@ public class Database {
         }
         String Request;
         Request = "create table Following ("
-                + "FOREIGN KEY (Item) REFERENCES FollowedItem(Id_Item) NOT NULL,"
-                + "FOREIGN KEY (Follower) REFERENCES User(Name) NOT NULL)";
+                + "Item VARCHAR(30) NOT NULL,"
+                + "Follower VARCHAR(30) NOT NULL,"
+                + "FOREIGN KEY (Item) REFERENCES FollowedItem(Id_Item),"
+                + "FOREIGN KEY (Follower) REFERENCES User(Name))";
         statement.executeUpdate(Request);
     }
 
@@ -298,5 +319,11 @@ public class Database {
         int NoOfAffectedRows = statement.executeUpdate("DROP TABLE Following");
         System.out.println();
         System.out.println("Table dropped, " + NoOfAffectedRows + " row(s) affected");
+    }
+
+    private void dropAllTable() throws SQLException{
+        dropTableFollowing();
+        dropTableFollowedItem();
+        
     }
 }
