@@ -7,10 +7,13 @@ package tradinggui;
 import java.rmi.RemoteException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import se.kth.id2212.bankrmi.Account;
+import tradingpf.Item;
 import tradingpf.MarketItf;
 import tradingpf.TraderItf;
 
@@ -52,7 +55,7 @@ public class WindowListItem extends javax.swing.JFrame {
    }
     
     private void initList() throws SQLException{
-        ResultSet itemList = null;
+        Vector<Item> itemList = null;
         String displayItem = null;
         try {
              itemList = server.getItemList(); 
@@ -60,15 +63,16 @@ public class WindowListItem extends javax.swing.JFrame {
             Logger.getLogger(WindowListItem.class.getName()).log(Level.SEVERE, null, ex);
         }
         DefaultListModel model = new DefaultListModel();
-        while (!itemList.next()) {
-            displayItem = (itemList.getString("Name")).concat("     ");
-            displayItem = displayItem.concat(Integer.toString(itemList.getInt("Price")));
+        for (Iterator<Item> it = itemList.iterator(); it.hasNext();) {
+            Item item = it.next();       
+            displayItem = (item.getName()).concat("     ");
+            displayItem = displayItem.concat(Integer.toString(item.getPrice()));
             displayItem = displayItem.concat ("     ");
-            displayItem = displayItem.concat(Integer.toString(itemList.getInt("Amount")));
+            displayItem = displayItem.concat(Integer.toString(item.getAmount()));
             displayItem = displayItem.concat ("     ");
-            displayItem = displayItem.concat(itemList.getString("SellerName"));
+            displayItem = displayItem.concat(item.getSellerName());
             displayItem = displayItem.concat ("     ") ;
-            displayItem = displayItem.concat(itemList.getString("Id_Item"));
+            displayItem = displayItem.concat(Integer.toString(item.getId()));
             model.addElement(displayItem);
         }
         jList1.setModel(model);

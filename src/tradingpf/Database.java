@@ -42,7 +42,7 @@ public class Database {
 
     private void createDatabase() throws SQLException, ClassNotFoundException {
         getConnection();
-        if (debug){
+        if (debug) {
             dropAllTable();
         }
         createUser();
@@ -66,10 +66,9 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
     }
 
-    
     private void createUser() throws SQLException {
         ResultSet result = conn.getMetaData().
                 getTables(null, null, "User", null);
@@ -88,11 +87,6 @@ public class Database {
     }
 
     private void createItem() throws SQLException {
-        ResultSet result = conn.getMetaData().
-                getTables(null, null, "Item", null);
-        if (result.next()) {
-            dropTableItem();
-        }
         String Request;
         Request = "create table Item ("
                 + "Id_Item INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,"
@@ -105,11 +99,6 @@ public class Database {
     }
 
     private void createCallBack() throws SQLException {
-        ResultSet result = conn.getMetaData().
-                getTables(null, null, "CallBack", null);
-        if (result.next()) {
-            dropTableCallBack();
-        }
         String Request;
         Request = "create table CallBack ("
                 + "Id_CallBack INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,"
@@ -124,30 +113,21 @@ public class Database {
     }
 
     private void createFollowedItem() throws SQLException {
-        ResultSet result = conn.getMetaData().
-                getTables(null, null, "FollowedItem", null);
-        if (result.next()) {
-            dropTableFollowedItem();
-        }
         String Request;
         Request = "create table FollowedItem ("
-                + "Id_Item INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,"
                 + "Name VARCHAR(30) NOT NULL,"
-                + "PrixMax INTEGER UNSIGNED NOT NULL)";
+                + "PrixMax INTEGER UNSIGNED NOT NULL,"
+                + "PRIMARY KEY(Name, PrixMax))";
         statement.executeUpdate(Request);
     }
 
     private void createFollowing() throws SQLException {
-        ResultSet result = conn.getMetaData().
-                getTables(null, null, "Following", null);
-        if (result.next()) {
-            dropTableFollowing();
-        }
         String Request;
         Request = "create table Following ("
-                + "Item VARCHAR(30) NOT NULL,"
+                + "ItemName VARCHAR(30) NOT NULL,"
+                + "PrixMax INTEGER UNSIGNED NOT NULL,"
                 + "Follower VARCHAR(30) NOT NULL,"
-                + "FOREIGN KEY (Item) REFERENCES FollowedItem(Id_Item),"
+                + "FOREIGN KEY (ItemName, PrixMax) REFERENCES FollowedItem(Name, PrixMax),"
                 + "FOREIGN KEY (Follower) REFERENCES User(Name))";
         statement.executeUpdate(Request);
     }
@@ -177,12 +157,12 @@ public class Database {
                 "UPDATE User "
                 + "SET NumberBought = NumberBought + 1 "
                 + "WHERE Name=?");
-        insertItemStatement = conn.prepareStatement("INSERT INTO Item"
+        insertItemStatement = conn.prepareStatement("INSERT INTO Item (Name, Price, Amount, Seller) "
                 + " VALUES (?,?,?,?)");
         listItemStatement = conn.prepareStatement("SELECT * FROM Item");
         removeItemStatement = conn.prepareStatement("DELETE FROM Item "
                 + "WHERE Id_Item=?");
-        insertCallBackStatement = conn.prepareStatement("INSERT INTO CallBack"
+        insertCallBackStatement = conn.prepareStatement("INSERT INTO CallBack (Type, ItemName, UserName) "
                 + " VALUES (?,?,?)");
         removeCallBackStatement = conn.prepareStatement("DELETE FROM CallBack"
                 + " WHERE Id_CallBack=?");
@@ -190,12 +170,12 @@ public class Database {
                 + " WHERE UserName=?");
         getItemStatement = conn.prepareStatement("SELECT * FROM Item WHERE Id_Item=?");
         getUserToNotifyStatement =
-                conn.prepareStatement("SELECT Follower FROM Following WHERE Item IN "
-                + "(SELECT Id_Item FROM FollowedItem WHERE Name=? AND PrixMax>=?)");
-        insertFollowedStatement = 
-                conn.prepareStatement("INSERT INTO FollowedItem VALUES (? ,?)"); 
+                conn.prepareStatement("SELECT Follower FROM Following WHERE (ItemName,PrixMax) IN "
+                + "(SELECT Name, PrixMax FROM FollowedItem WHERE Name=? AND PrixMax>=?)");
+        insertFollowedStatement =
+                conn.prepareStatement("INSERT INTO FollowedItem (Name, PrixMax) VALUES (? ,?)");
         insertFollowingStatement =
-                conn.prepareStatement("INSERT INTO Following VALUES (?,?)");
+                conn.prepareStatement("INSERT INTO Following (ItemName,PrixMax,Follower) VALUES (?,?,?)");
     }
 
     public void insertUser(String userName, String password) throws SQLException {
@@ -285,10 +265,10 @@ public class Database {
         to_return = getItemStatement.executeQuery();
         return to_return;
     }
-    
+
     public ResultSet getUserToNotify(
-            String itemName, 
-            Integer itemPrice) 
+            String itemName,
+            Integer itemPrice)
             throws SQLException {
         ResultSet to_return = null;
         getUserToNotifyStatement.setString(1, itemName);
@@ -327,26 +307,41 @@ public class Database {
         System.out.println("Table dropped, " + NoOfAffectedRows + " row(s) affected");
     }
 
-
-    private void dropAllTable() throws SQLException{
-        dropTableFollowing();
-        dropTableFollowedItem();
-        
+    private void dropAllTable() throws SQLException {
+        ResultSet result = conn.getMetaData().
+                getTables(null, null, "Following", null);
+        if (result.next()) {
+            dropTableFollowing();
+        }
+        result = conn.getMetaData().
+                getTables(null, null, "FollowedItem", null);
+        if (result.next()) {
+            dropTableFollowedItem();
+        }
+        result = conn.getMetaData().
+                getTables(null, null, "CallBack", null);
+        if (result.next()) {
+            dropTableCallBack();
+        }
+        result = conn.getMetaData().
+                getTables(null, null, "Item", null);
+        if (result.next()) {
+            dropTableItem();
+        }
+        result = conn.getMetaData().
+                getTables(null, null, "User", null);
+        if (result.next()) {
+            dropTableUser();
+        }
     }
-    
-    /*
-     * 
-     * @param itemName
-     * @param priceMax
-     * @param userName
-     * @throws SQLException 
-     */
-    public void insertFollowed(String itemName, Integer priceMax, String userName) throws SQLException{
+
+    public void insertFollowed(String itemName, Integer priceMax, String userName) throws SQLException {
         insertFollowedStatement.setString(1, itemName);
-        insertFollowedStatement.setInt(2, priceMax); 
+        insertFollowedStatement.setInt(2, priceMax);
         insertFollowedStatement.executeUpdate();
-        insertFollowingStatement.setString(1, itemName); 
-        insertFollowingStatement.setString(2, userName); 
+        insertFollowingStatement.setString(1, itemName);
+        insertFollowingStatement.setInt(2, priceMax);
+        insertFollowingStatement.setString(3, userName);
         insertFollowingStatement.executeUpdate();
     }
 }

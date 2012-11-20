@@ -151,13 +151,13 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
     @Override
     public synchronized void sell(Item item, Integer amount) throws RemoteException {
-        itemList.add(item);
         try {
             database.insertItem(
                     item.getName(), 
                     item.getPrice(), 
                     amount, 
                     item.getSellerName());
+            database.updateSoldItem(item.getSellerName());
         } catch (SQLException ex) {
             Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -221,6 +221,11 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
             }
             
             seller.notifyBuy(itemName);
+            try {
+                database.updateBoughtItem(clientName);
+            } catch (SQLException ex) {
+                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -267,10 +272,18 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
 
     @Override
-    public ResultSet getItemList() throws RemoteException{
-        ResultSet res = null;
+    public Vector<Item> getItemList() throws RemoteException{
+        Vector<Item> res = new Vector<Item>();
+        ResultSet result = null;
         try {
-            res = database.listItem();
+            result = database.listItem();
+            while(result.next()){
+                res.add(new Item(result.getString("Name"),
+                                result.getInt("Price"),
+                                result.getString("Seller"),
+                                result.getInt("Amount"),
+                                result.getInt("Id_Item")));
+            }
         } catch (Exception ex) {
             Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
