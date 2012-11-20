@@ -208,34 +208,48 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
             registeredClients.get(clientName).notifyNotEnoughMoney();
         } else {
             try {
-                clientAccount.withdraw(itemPrice);
-                sellerAccount.deposit(itemPrice);
-            } catch (RejectedException ex) {
-                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
+                try {
+                    clientAccount.withdraw(itemPrice);
+                    sellerAccount.deposit(itemPrice);
+                } catch (RejectedException ex) {
+                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    /*
+                     * Remove item of itemList
+                     */
+                    database.removeItem(itemId);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 /*
-                 * Remove item of itemList
+                 * Notify to the seller
                  */
-                database.removeItem(itemId);
-            } catch (SQLException ex) {
-                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            /*
-             * Notify to the seller
-             */
-            TraderItf seller = null;
-            try {
-                seller = (TraderItf) Naming.lookup(sellerName);
-            } catch (NotBoundException ex) {
-                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            seller.notifyBuy(itemName);
-            try {
-                database.updateBoughtItem(clientName);
+                TraderItf seller = null;
+                try {
+                    seller = (TraderItf) Naming.lookup(sellerName);
+                } catch (NotBoundException ex) {
+                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                ResultSet res = database.getUser(clientName);
+                if (!res.getBoolean("Log")) {
+                    database.insertCallBack(true, clientName, itemName);
+                } else {
+                    try {
+                       seller = (TraderImpl) Naming.lookup(clientName);
+                    } catch (Exception ex) {
+                        System.out.println("Cannot get the bank " + ex);
+                        System.exit(1);
+                    }
+                    seller.notifyBuy(itemName);
+                }
+                try {
+                    database.updateBoughtItem(clientName);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
