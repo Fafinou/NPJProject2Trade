@@ -130,6 +130,23 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     }
 
     @Override
+    public synchronized void logout(String name) throws RemoteException, SQLException {
+        database.logoutUser(name);
+    }
+
+    @Override
+    public synchronized Integer getNumberSoldItem(String name) throws RemoteException, SQLException {
+        ResultSet res = database.getUser(name);
+        return res.getInt("NumberSold");
+    }
+
+    @Override
+    public synchronized Integer getNumberBoughtItem(String name) throws RemoteException, SQLException {
+        ResultSet res = database.getUser(name);
+        return res.getInt("NumberBought");
+    }
+
+    @Override
     public synchronized void unregister(String name) throws RemoteException {
         registeredClients.remove(name);
         Wish wish = null;
@@ -197,33 +214,45 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
             registeredClients.get(clientName).notifyNotEnoughMoney();
         } else {
             try {
-                clientAccount.withdraw(itemPrice);
-                sellerAccount.deposit(itemPrice);
-            } catch (RejectedException ex) {
-                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
+                try {
+                    clientAccount.withdraw(itemPrice);
+                    sellerAccount.deposit(itemPrice);
+                } catch (RejectedException ex) {
+                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    /*
+                     * Remove item of itemList
+                     */
+                    database.removeItem(itemId);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 /*
-                 * Remove item of itemList
+                 * Notify to the seller
                  */
-                database.removeItem(itemId);
-            } catch (SQLException ex) {
-                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            /*
-             * Notify to the seller
-             */
-            TraderItf seller = null;
-            try {
-                seller = (TraderItf) Naming.lookup(sellerName);
-            } catch (NotBoundException ex) {
-                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
 
-            seller.notifyBuy(itemName);
-            try {
+                TraderItf seller = null;
+                try {
+                    seller = (TraderItf) Naming.lookup(sellerName);
+                } catch (NotBoundException ex) {
+                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                ResultSet res = database.getUser(clientName);
+                if (!res.getBoolean("Log")) {
+                    database.insertCallBack(true, clientName, itemName);
+                } else {
+                    try {
+                        seller = (TraderImpl) Naming.lookup(clientName);
+                    } catch (Exception ex) {
+                        System.out.println("Cannot get the bank " + ex);
+                        System.exit(1);
+                    }
+                    seller.notifyBuy(itemName);
+                }
+
                 database.updateBoughtItem(clientName);
             } catch (SQLException ex) {
                 Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
