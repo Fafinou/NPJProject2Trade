@@ -85,5 +85,5 @@ public interface MarketItf extends Remote {
      * @return a list of all items on the platform.
      * @throws RemoteException 
      */
-    public ResultSet getItemList() throws RemoteException;
+    public Vector<Item> getItemList() throws RemoteException;
 }

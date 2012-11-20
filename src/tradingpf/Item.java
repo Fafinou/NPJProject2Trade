@@ -4,6 +4,7 @@
  */
 package tradingpf;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.IntArrayData;
 import java.io.Serializable;
 
 /**
@@ -16,6 +17,8 @@ public class Item implements Serializable {
     private String name;
     private Integer price;
     private String sellerName;
+    private Integer amount;
+    private Integer id;
 
     /**
      * Creates a new Item
@@ -27,7 +30,34 @@ public class Item implements Serializable {
         this.name = name;
         this.price = price;
         this.sellerName = sellerName;
+        this.amount = 1;
     }
+
+    public Item(String name, Integer price, String sellerName, Integer amount, Integer id) {
+        this.name = name;
+        this.price = price;
+        this.sellerName = sellerName;
+        this.amount = amount;
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+    
 
     public String getName() {
         return name;
