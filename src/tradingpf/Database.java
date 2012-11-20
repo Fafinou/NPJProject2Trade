@@ -83,7 +83,7 @@ public class Database {
                                 /* Type = 0 if it is an available callback
                                  * Type = 1 if it is a sold callback
                                  */
-				"NameItem VARCHAR(30) NOT NULL," +
+				"ItemName VARCHAR(30) NOT NULL," +
                                 "FOREIGN KEY (UserName) REFERENCES User(Name) NOT NULL)";
             statement.executeUpdate(Request);   
         }

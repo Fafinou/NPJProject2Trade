@@ -84,8 +84,42 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     }
     
     @Override
-    public synchronized void login(String name) throws SQLException, RemoteException {
+    public synchronized void login(String name) throws SQLException {
         database.loginUser(name); 
+        ResultSet callBack = null;
+        try {
+            callBack = database.listCallBack(name);
+        } catch (Exception ex) {
+            Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        while (! callBack.next()) {
+            String clientName = callBack.getString("UserName");
+            String itemName = callBack.getString("ItemName");
+            TraderItf client = null;
+            try {
+                client = (TraderImpl) Naming.lookup(clientName);
+            } catch (Exception ex) {
+                System.out.println("Cannot get the bank " + ex);
+                System.exit(1);
+            }
+            if (callBack.getBoolean("Type")){
+                try {
+                    /* Type = sold */                
+                    client.notifyBuy(itemName);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                /* Type = available */
+                try {
+                    /* Type = sold */                
+                    client.notifyAvailable(itemName);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    
     }
     
     @Override
