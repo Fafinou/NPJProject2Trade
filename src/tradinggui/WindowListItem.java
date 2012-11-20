@@ -5,17 +5,15 @@
 package tradinggui;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
 import se.kth.id2212.bankrmi.Account;
 import tradingpf.Item;
-import tradingpf.MarketImpl;
 import tradingpf.MarketItf;
 import tradingpf.TraderItf;
 
@@ -48,11 +46,15 @@ public class WindowListItem extends javax.swing.JFrame {
         this.account = account;
         this.server = server;
         this.client = client;
-        initList();
+        try {
+            initList();
+        } catch (SQLException ex) {
+            Logger.getLogger(WindowListItem.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
    }
     
-    private void initList(){
+    private void initList() throws SQLException{
         
         Integer nbItem = 0;
         try {
@@ -60,8 +62,7 @@ public class WindowListItem extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             Logger.getLogger(WindowListItem.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Item currentItem;
-        Vector<Item> itemList = new Vector<Item>();
+        ResultSet itemList = null;
         String displayItem = null;
         try {
              itemList = server.getItemList(); 
@@ -69,12 +70,15 @@ public class WindowListItem extends javax.swing.JFrame {
             Logger.getLogger(WindowListItem.class.getName()).log(Level.SEVERE, null, ex);
         }
         DefaultListModel model = new DefaultListModel();
-        for (Iterator<Item> it = itemList.iterator(); it.hasNext();) {
-            currentItem = it.next();
-            displayItem = (currentItem.getName()).concat("     ");
-            displayItem = displayItem.concat(Integer.toString(currentItem.getPrice()));
+        while (!itemList.next()) {
+            displayItem = (itemList.getString("Name")).concat("     ");
+            displayItem = displayItem.concat(Integer.toString(itemList.getInt("Price")));
             displayItem = displayItem.concat ("     ");
-            displayItem = displayItem.concat(currentItem.getSellerName());            
+            displayItem = displayItem.concat(Integer.toString(itemList.getInt("Amount")));
+            displayItem = displayItem.concat ("     ");
+            displayItem = displayItem.concat(itemList.getString("SellerName"));
+            displayItem = displayItem.concat ("     ") ;
+            displayItem = displayItem.concat(itemList.getString("Id_Item"));
             model.addElement(displayItem);
         }
         jList1.setModel(model);

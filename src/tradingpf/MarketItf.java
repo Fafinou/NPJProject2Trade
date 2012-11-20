@@ -6,6 +6,7 @@ package tradingpf;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -89,5 +90,5 @@ public interface MarketItf extends Remote {
      * @return a list of all items on the platform.
      * @throws RemoteException 
      */
-    public Vector<Item> getItemList() throws RemoteException;
+    public ResultSet getItemList() throws RemoteException;
 }

@@ -206,8 +206,13 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     }
 
     @Override
-    public Vector<Item> getItemList() throws RemoteException {
-        return itemList;
-
+    public ResultSet getItemList() throws RemoteException{
+        ResultSet res = null;
+        try {
+            res = database.listItem();
+        } catch (Exception ex) {
+            Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return res;
     }
 }
