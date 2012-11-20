@@ -84,13 +84,14 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     }
 
     @Override
-    public synchronized void buy(String clientName, Item item) throws RemoteException {
+    public synchronized void buy(String clientName, Integer itemId) throws RemoteException {
         /*
          * Payment
          */
-        String sellerName = item.getSellerName();
+        
         Account clientAccount = null;
         Account sellerAccount = null;
+        
         try {
             clientAccount = bank.getAccount(clientName);
             sellerAccount = bank.getAccount(sellerName);
