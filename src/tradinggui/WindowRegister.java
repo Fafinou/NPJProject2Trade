@@ -4,10 +4,13 @@
  */
 package tradinggui;
 
+import java.net.MalformedURLException;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Account;
+import se.kth.id2212.bankrmi.Bank;
 import se.kth.id2212.bankrmi.RejectedException;
 import tradingpf.MarketItf;
 import tradingpf.TraderImpl;
@@ -19,10 +22,9 @@ import tradingpf.TraderItf;
  */
 public class WindowRegister extends javax.swing.JFrame {
 
-    private Account account;
+    private Bank bank;
     private MarketItf server;
     private TraderItf client;
-    private String clientName;
 
     /**
      * Creates new form WindowRegister
@@ -33,21 +35,17 @@ public class WindowRegister extends javax.swing.JFrame {
 
     /**
      * Creates new form WindowRegister
-     * 
+     *
      * @param account : the account of the client
      * @param server : the market
      * @param client
-     * @param clientName : the name of the client
      */
-    public WindowRegister(Account account, MarketItf server, TraderItf client, 
-            String clientName) {
+    public WindowRegister(Bank bank, MarketItf server) {
         initComponents();
-        this.account = account;
+        this.bank = bank;
         this.server = server;
-        this.client = client;
-        this.clientName = clientName;
+        this.client = null;
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -60,6 +58,11 @@ public class WindowRegister extends javax.swing.JFrame {
 
         btnRegister = new javax.swing.JButton();
         btnContinue = new javax.swing.JButton();
+        nameTextField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        passwordField = new javax.swing.JPasswordField();
+        errorMessage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,12 +73,16 @@ public class WindowRegister extends javax.swing.JFrame {
             }
         });
 
-        btnContinue.setText("Already  registered");
+        btnContinue.setText("Login");
         btnContinue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnContinueActionPerformed(evt);
             }
         });
+
+        jLabel1.setText("Name");
+
+        jLabel2.setText("Password");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -83,45 +90,161 @@ public class WindowRegister extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(52, 52, 52)
-                .addComponent(btnRegister)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-                .addComponent(btnContinue)
-                .addGap(66, 66, 66))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGap(23, 23, 23)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(errorMessage)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                                .addComponent(nameTextField)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(btnRegister)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                        .addComponent(btnContinue, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(87, 87, 87))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(42, Short.MAX_VALUE)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegister)
                     .addComponent(btnContinue))
-                .addGap(42, 42, 42))
+                .addGap(35, 35, 35)
+                .addComponent(errorMessage)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        String password = new String(passwordField.getPassword());
+        String clientName = nameTextField.getText();
+
+        /* Check password and name*/
+        Boolean checkName = false;
+        Boolean checkPassword = false;
         try {
             // TODO add your handling code here:
-            server.register(clientName, client);
+            checkName = server.verifyName(clientName);
+            checkPassword = server.verifyPassword(password);
         } catch (RemoteException ex) {
             Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RejectedException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
         }
-        WindowHome nextWindow = new WindowHome(account, server, client);
-        nextWindow.setVisible(true);
-        this.setVisible(false);
-        this.dispose();
+        if (!checkName) {
+            errorMessage.setText("Error : This name have already used");
+        } else if (!checkPassword) {
+            errorMessage.setText("Error : The password length should be at least 8 characters");
+        } else {
+            /* Add the user in database */
+            try {
+                server.register(clientName, password);
+            } catch (SQLException ex) {
+                Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            /* Manage Ban Account */
+        if (clientName.equals("")) {
+            System.out.println("Error, empty name");
+            System.exit(1);
+        }
+        Account account = null;
+        try {
+            //Create a new account and make a 100$ deposit on it. Yes, we are nice guys ;)
+            account = bank.newAccount(clientName);
+            client = new TraderImpl(clientName);
+            account.deposit(100);
+            //UnicastRemoteObject.exportObject(client);
+            try {
+                java.rmi.Naming.rebind(clientName, client);
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            } catch (RemoteException ex) {
+                System.out.println(ex);
+            } catch (RejectedException ex) {
+                System.out.println(ex);
+            }
+        
+            /* Change the windows */
+            WindowHome nextWindow = new WindowHome(account, server, client);
+            nextWindow.setVisible(true);
+            this.setVisible(false);
+            this.dispose();
+        }
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnContinueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinueActionPerformed
         // TODO add your handling code here:
-        WindowHome nextWindow = new WindowHome(account, server, client);
-        nextWindow.setVisible(true);
-        this.setVisible(false);
-        this.dispose();
+        String password = new String(passwordField.getPassword());
+        String clientName = nameTextField.getText();
+
+        /* Check the password */
+        Boolean check = false;
+        try {
+            // TODO add your handling code here:
+            check = server.verifyPasswordForAUser(clientName, password);
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (!check) {
+            errorMessage.setText("Error : there is an error in the name or the password");
+        } else {
+            /* Log the user*/
+            try {
+                server.login(clientName);
+            } catch (SQLException ex) {
+                Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            /* Manage Bank Account */
+            if (clientName.equals("")) {
+                System.out.println("Error, empty name");
+                System.exit(1);
+            }
+            try {
+                client = new TraderImpl(clientName);
+            } catch (RemoteException ex) {
+                Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            Account account = null;
+            try {
+                account = bank.getAccount(clientName);
+            } catch (RemoteException ex) {
+                Logger.getLogger(WindowRegister.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (account == null) {
+                System.err.println("no account !!");
+                System.exit(1);
+            }
+            /* Change the window*/
+            WindowHome nextWindow = new WindowHome(account, server, client);
+            nextWindow.setVisible(true);
+            this.setVisible(false);
+            this.dispose();
+        }
     }//GEN-LAST:event_btnContinueActionPerformed
 
     /**
@@ -162,5 +285,10 @@ public class WindowRegister extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnContinue;
     private javax.swing.JButton btnRegister;
+    private javax.swing.JLabel errorMessage;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField nameTextField;
+    private javax.swing.JPasswordField passwordField;
     // End of variables declaration//GEN-END:variables
 }

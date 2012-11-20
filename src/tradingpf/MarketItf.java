@@ -6,6 +6,7 @@ package tradingpf;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
@@ -24,7 +25,26 @@ public interface MarketItf extends Remote {
      * @throws RemoteException
      * @throws RejectedException 
      */
-    public void register(String name, TraderItf client) throws RemoteException, RejectedException;
+    public void register(String name, String password) throws SQLException, RemoteException;
+    
+    
+    /**
+     *
+     * @param name
+     * @param password
+     * @return
+     * @throws SQLException
+     * @throws RemoteException
+     */
+    public boolean verifyName(String name) throws SQLException, RemoteException;
+    
+    
+    public boolean verifyPassword(String password) throws SQLException, RemoteException;
+    
+    public boolean verifyPasswordForAUser(String name, String password) throws SQLException, RemoteException;
+    
+    public void login(String name) throws SQLException, RemoteException;
+    
     /**
      * Unregisters the client from the market. Client must be registered
      * @param name Name of the client soon to be unregistered

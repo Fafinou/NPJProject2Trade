@@ -146,26 +146,32 @@ public class Database {
         public void insertUser(String userName, String password) throws SQLException{
             insertUserStatement.setString(1, userName);  
             insertUserStatement.setString(2, password); 
+            insertUserStatement.executeUpdate();
         }
         
         public void removeUser(String userName)throws SQLException{
             removeUserStatement.setString(1, userName);
+            removeUserStatement.executeUpdate();
         }
         
-        public void getUser(String userName) throws SQLException{
-            getUserStatement.setString(1, userName);  
+        public ResultSet getUser(String userName) throws SQLException{
+            getUserStatement.setString(1, userName); 
+            return getUserStatement.executeQuery();
         }
         
         public void loginUser(String userName) throws SQLException{
-            loginUserStatement.setString(1, userName);  
+            loginUserStatement.setString(1, userName);
+            loginUserStatement.executeUpdate();
         }
         
         public void logoutUser(String userName) throws SQLException{
             logoutUserStatement.setString(1, userName); 
+            logoutUserStatement.executeUpdate();
         }
         
         public void updateSoldItem(String userName) throws SQLException{
             updateSoldItemStatement.setString(1, userName); 
+            updateSoldItemStatement.executeUpdate();
         }
     
     

@@ -7,6 +7,8 @@ package tradingpf;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +30,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     private Vector<Wish> wishesList;
     private Vector<Item> itemList;
     private String marketName;
+    private Database database;
 
     /**
      * Creates a new market implementation.
@@ -36,7 +39,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
      * @param bankName Name of the bank used for account management. Must exist.
      * @throws RemoteException
      */
-    public MarketImpl(String marketName, String bankName) throws RemoteException {
+    public MarketImpl(String marketName, String bankName) throws RemoteException, SQLException {
         this.bankName = bankName;
         try {
             this.bank = (Bank) Naming.lookup(bankName);
@@ -49,14 +52,42 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
         this.wishesList = new Vector<Wish>();
         this.itemList = new Vector<Item>();
-
+        this.database = new Database();
     }
 
     @Override
-    public synchronized void register(String name, TraderItf client) throws RemoteException, RejectedException {
-        registeredClients.put(name, client);
+    public synchronized void register(String name, String password) throws SQLException, RemoteException {
+        //registeredClients.put(name, client);
+        database.insertUser(name, password);  
     }
-
+    
+    @Override
+    public synchronized boolean verifyName(String name) throws SQLException, RemoteException {
+        ResultSet result = database.getUser(name);
+        return (!result.next());
+    }
+    
+    @Override
+    public synchronized boolean verifyPassword(String password) throws SQLException, RemoteException {
+        return (password.length() > 7);
+    }
+    
+    @Override
+    public synchronized boolean verifyPasswordForAUser(String name, String password) throws SQLException, RemoteException {
+        ResultSet result = database.getUser(name);
+        if (!result.next()) {
+            return false;
+        } else {
+            return (password.equals(result.getString("Password")));
+        }
+        
+    }
+    
+    @Override
+    public synchronized void login(String name) throws SQLException, RemoteException {
+        database.loginUser(name); 
+    }
+    
     @Override
     public synchronized void unregister(String name) throws RemoteException {
         registeredClients.remove(name);
