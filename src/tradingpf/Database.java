@@ -13,7 +13,7 @@ import java.sql.Statement;
 
 /**
  *
- * @author zoe
+ * @author Simon Cathébras and Zoé Bellot
  */
 public class Database {
     
@@ -107,12 +107,24 @@ public class Database {
         }
         
         private void initOperations() throws SQLException {
-            removeUserStatement= conn.prepareStatement("");
-            getUserStatement = conn.prepareStatement("");
-            loginUserStatement = conn.prepareStatement("");
-            logoutUserStatement = conn.prepareStatement("");
-            updateSoldItemStatement = conn.prepareStatement("");
-            
+
+
+            insertUserStatement = conn.prepareStatement("INSERT INTO User " 
+                    + "                                 VALUES (?,?,0,0,true)");
+            removeUserStatement= conn.prepareStatement("DELETE FROM User "
+                    + "                                 WHERE Name = ?");
+            getUserStatement = conn.prepareStatement("SELECT * FROM User "
+                    + "                                 WHERE Name= ?");
+            loginUserStatement = conn.prepareStatement("UPDATE User "
+                    + "                                 SET Log=true "
+                    + "                                 WHERE Name = ?");
+            logoutUserStatement = conn.prepareStatement("UPDATE User "
+                    + "                                 SET Log=false "
+                    + "                                 WHERE Name = ?");
+            updateSoldItemStatement = conn.prepareStatement("UPDATE User "
+                    + "                                     SET NumberSold = NumberSold + 1 " 
+                    + "                                     WHERE Name = ?");
+                        
             updateBoughtItemStatement = 
                                     conn.prepareStatement(
                                            "UPDATE User "
@@ -127,18 +139,34 @@ public class Database {
                                                         + " VALUES (?,?,?)");
             removeCallBackStatement = conn.prepareStatement("DELETE FROM CallBack"
                     + " WHERE Id_CallBack=?");
-            listCallBackStatement = conn.prepareStatement("");
+            listCallBackStatement = conn.prepareStatement("SELECT * FROM CallBack"
+                    + " WHERE UserName=?");
         }
         
-        public void insertUser(){
-            throws UnsupportedOperationException;
+        public void insertUser(String userName, String password) throws SQLException{
+            insertUserStatement.setString(1, userName);  
+            insertUserStatement.setString(2, password); 
         }
         
-    private PreparedStatement removeUser;
-    private PreparedStatement getUser;
-    private PreparedStatement loginUser;
-    private PreparedStatement logoutUser;
-    private PreparedStatement updateSoldItem;
+        public void removeUser(String userName)throws SQLException{
+            removeUserStatement.setString(1, userName);
+        }
+        
+        public void getUser(String userName) throws SQLException{
+            getUserStatement.setString(1, userName);  
+        }
+        
+        public void loginUser(String userName) throws SQLException{
+            loginUserStatement.setString(1, userName);  
+        }
+        
+        public void logoutUser(String userName) throws SQLException{
+            logoutUserStatement.setString(1, userName); 
+        }
+        
+        public void updateSoldItem(String userName) throws SQLException{
+            updateSoldItemStatement.setString(1, userName); 
+        }
     
     
     
