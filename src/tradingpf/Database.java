@@ -33,6 +33,7 @@ public class Database {
     private PreparedStatement removeCallBackStatement;
     private PreparedStatement listCallBackStatement;
     private PreparedStatement getItemStatement;
+    private PreparedStatement getUserToNotifyStatement;
 
     private void createDatabase() throws SQLException, ClassNotFoundException {
         getConnection();
@@ -165,6 +166,9 @@ public class Database {
         listCallBackStatement = conn.prepareStatement("SELECT * FROM CallBack"
                 + " WHERE UserName=?");
         getItemStatement = conn.prepareStatement("SELECT * FROM Item WHERE Id_Item=?");
+        getUserToNotifyStatement =
+                conn.prepareStatement("SELECT Follower FROM Following WHERE Item IN "
+                + "(SELECT Id_Item FROM FollowedItem WHERE Name=? AND PrixMax>=?)");
     }
 
     public void insertUser(String userName, String password) throws SQLException {
@@ -198,7 +202,7 @@ public class Database {
         updateSoldItemStatement.executeUpdate();
     }
 
-    public void updateBoughtItem(String UserName) throws Exception {
+    public void updateBoughtItem(String UserName) throws SQLException {
         updateBoughtItemStatement.setString(1, UserName);
         updateBoughtItemStatement.executeUpdate();
     }
@@ -206,7 +210,7 @@ public class Database {
     public void insertItem(String itemName,
             Integer itemPrice,
             Integer amount,
-            String sellerName) throws Exception {
+            String sellerName) throws SQLException {
 
         insertItemStatement.setString(1, itemName);
         insertItemStatement.setInt(2, itemPrice);
@@ -216,42 +220,53 @@ public class Database {
 
     }
 
-    public ResultSet listItem() throws Exception {
+    public ResultSet listItem() throws SQLException {
         ResultSet to_return = null;
         to_return = listItemStatement.executeQuery();
         return to_return;
     }
 
-    public void removeItem(Integer itemId) throws Exception {
+    public void removeItem(Integer itemId) throws SQLException {
         removeItemStatement.setInt(1, itemId);
         removeItemStatement.executeUpdate();
     }
 
     public void insertCallBack(Boolean isSold,
             String subjectName,
-            String itemName) throws Exception {
+            String itemName) throws SQLException {
         insertCallBackStatement.setBoolean(1, isSold);
         insertCallBackStatement.setString(2, itemName);
         insertCallBackStatement.setString(3, subjectName);
         insertCallBackStatement.executeUpdate();
     }
 
-    public void removeCallBack(Integer idCallBack) throws Exception {
+    public void removeCallBack(Integer idCallBack) throws SQLException {
         removeCallBackStatement.setInt(1, idCallBack);
         removeCallBackStatement.executeUpdate();
     }
 
-    public ResultSet listCallBack(String userName) throws Exception {
+    public ResultSet listCallBack(String userName) throws SQLException {
         ResultSet to_return = null;
         listCallBackStatement.setString(1, userName);
         to_return = listCallBackStatement.executeQuery();
         return to_return;
     }
 
-    public ResultSet getItem(Integer itemId) throws Exception {
+    public ResultSet getItem(Integer itemId) throws SQLException {
         ResultSet to_return = null;
         getItemStatement.setInt(1, itemId);
         to_return = getItemStatement.executeQuery();
+        return to_return;
+    }
+    
+    public ResultSet getUserToNotify(
+            String itemName, 
+            Integer itemPrice) 
+            throws SQLException {
+        ResultSet to_return = null;
+        getUserToNotifyStatement.setString(1, itemName);
+        getUserToNotifyStatement.setInt(2, itemPrice);
+        to_return = getUserToNotifyStatement.executeQuery();
         return to_return;
     }
 
