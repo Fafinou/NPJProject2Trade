@@ -5,6 +5,7 @@
 package tradinggui;
 
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Account;
@@ -66,6 +67,7 @@ public class WindowHome extends javax.swing.JFrame {
         accountLabel = new javax.swing.JLabel();
         btnFollow = new javax.swing.JButton();
         clientNameLabel = new javax.swing.JLabel();
+        btnLogout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -103,6 +105,13 @@ public class WindowHome extends javax.swing.JFrame {
 
         clientNameLabel.setText("jLabel1");
 
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -113,14 +122,20 @@ public class WindowHome extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnSell)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(124, 124, 124)
-                                        .addComponent(jLabel4))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(176, 176, 176)
-                                        .addComponent(accountLabel)))
-                                .addGap(79, 79, 79)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(124, 124, 124)
+                                                .addComponent(jLabel4))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(176, 176, 176)
+                                                .addComponent(accountLabel)))
+                                        .addGap(79, 79, 79))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(btnLogout)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnUnregister)
                                     .addComponent(btnFollow))))
@@ -150,9 +165,15 @@ public class WindowHome extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addGap(32, 32, 32)
                         .addComponent(accountLabel)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnFollow)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnFollow)
+                        .addContainerGap(42, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLogout)
+                        .addGap(33, 33, 33))))
         );
 
         pack();
@@ -193,6 +214,21 @@ public class WindowHome extends javax.swing.JFrame {
         nextWindow.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnFollowActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        try {
+            // TODO add your handling code here:
+            server.logout(((TraderImpl)client).getName());
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowHome.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(WindowHome.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        WindowConfig nextWindow = new WindowConfig();
+        this.setVisible(false);
+        nextWindow.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
      private void buttonSetVisible(Boolean visible) {
         btnBuy.setVisible(visible);
@@ -239,6 +275,7 @@ public class WindowHome extends javax.swing.JFrame {
     private javax.swing.JLabel accountLabel;
     private javax.swing.JButton btnBuy;
     private javax.swing.JButton btnFollow;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnSell;
     private javax.swing.JButton btnUnregister;
     private javax.swing.JLabel clientNameLabel;

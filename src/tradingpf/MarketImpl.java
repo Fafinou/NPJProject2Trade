@@ -122,6 +122,12 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
             }
         }
         }
+    
+    
+    @Override
+    public synchronized void logout(String name) throws RemoteException, SQLException {
+        database.logoutUser(name);
+    }
 
     @Override
     public synchronized void unregister(String name) throws RemoteException {
