@@ -87,14 +87,14 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
     @Override
     public synchronized void login(String name) throws SQLException {
-        database.loginUser(name); 
+        database.loginUser(name);
         ResultSet callBack = null;
         try {
             callBack = database.listCallBack(name);
         } catch (Exception ex) {
             Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        while (! callBack.next()) {
+        while (!callBack.next()) {
             String clientName = callBack.getString("UserName");
             String itemName = callBack.getString("ItemName");
             TraderItf client = null;
@@ -104,24 +104,30 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
                 System.out.println("Cannot get the bank " + ex);
                 System.exit(1);
             }
-            if (callBack.getBoolean("Type")){
+            if (callBack.getBoolean("Type")) {
                 try {
-                    /* Type = sold */                
+                    /*
+                     * Type = sold
+                     */
                     client.notifyBuy(itemName);
                 } catch (RemoteException ex) {
                     Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                /* Type = available */
+                /*
+                 * Type = available
+                 */
                 try {
-                    /* Type = sold */                
+                    /*
+                     * Type = sold
+                     */
                     client.notifyAvailable(itemName);
                 } catch (RemoteException ex) {
                     Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
-        }
+    }
 
     @Override
     public synchronized void unregister(String name) throws RemoteException {
@@ -141,15 +147,17 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
                 itemList.remove(itemList.indexOf(item));
             }
         }
+
+        //database.removeUser();
     }
 
     @Override
     public synchronized void sell(Item item, Integer amount) throws RemoteException {
         try {
             database.insertItem(
-                    item.getName(), 
-                    item.getPrice(), 
-                    amount, 
+                    item.getName(),
+                    item.getPrice(),
+                    amount,
                     item.getSellerName());
             database.updateSoldItem(item.getSellerName());
         } catch (SQLException ex) {
@@ -213,7 +221,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
             } catch (MalformedURLException ex) {
                 Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             seller.notifyBuy(itemName);
             try {
                 database.updateBoughtItem(clientName);
@@ -230,7 +238,9 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
     @Override
     public synchronized void wish(TraderItf follower, String followerName, String itemName, Integer itemPrice) throws RemoteException {
-        /* Add the followed item*/
+        /*
+         * Add the followed item
+         */
         try {
             database.insertFollowed(itemName, itemPrice, followerName);
         } catch (SQLException ex) {
@@ -238,45 +248,49 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
         }
     }
 
-
     private void lookupFollower(Item item) throws RemoteException {
         ResultSet result = null;
+        ResultSet resultUser = null;
         String followerName = null;
         TraderItf client = null;
         try {
             result = database.getUserToNotify(item.getName(), item.getPrice());
-            while(result.next()){
-                
+            while (result.next()) {
+
                 followerName = result.getString("Follower");
-                
-                try {
-                    client = (TraderItf) Naming.lookup(followerName);
-                } catch (NotBoundException ex) {
-                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (MalformedURLException ex) {
-                    Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                resultUser = database.getUser(followerName);
+                resultUser.next();
+                if (!resultUser.getBoolean("Log")) {
+                    database.insertCallBack(false, followerName, item.getName());
+                } else {
+                    try {
+                        client = (TraderItf) Naming.lookup(followerName);
+                    } catch (NotBoundException ex) {
+                        Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    client.notifyAvailable(item.getName());
                 }
-                
-                client.notifyAvailable(item.getName());
             }
         } catch (SQLException ex) {
             Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-
     @Override
-    public Vector<Item> getItemList() throws RemoteException{
+    public Vector<Item> getItemList() throws RemoteException {
         Vector<Item> res = new Vector<Item>();
         ResultSet result = null;
         try {
             result = database.listItem();
-            while(result.next()){
+            while (result.next()) {
                 res.add(new Item(result.getString("Name"),
-                                result.getInt("Price"),
-                                result.getString("Seller"),
-                                result.getInt("Amount"),
-                                result.getInt("Id_Item")));
+                        result.getInt("Price"),
+                        result.getString("Seller"),
+                        result.getInt("Amount"),
+                        result.getInt("Id_Item")));
             }
         } catch (Exception ex) {
             Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);

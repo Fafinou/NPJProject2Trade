@@ -165,7 +165,7 @@ public class Database {
         insertCallBackStatement = conn.prepareStatement("INSERT INTO CallBack (Type, ItemName, UserName) "
                 + " VALUES (?,?,?)");
         removeCallBackStatement = conn.prepareStatement("DELETE FROM CallBack"
-                + " WHERE Id_CallBack=?");
+                + " WHERE UserName=?");
         listCallBackStatement = conn.prepareStatement("SELECT * FROM CallBack"
                 + " WHERE UserName=?");
         getItemStatement = conn.prepareStatement("SELECT * FROM Item WHERE Id_Item=?");
@@ -247,8 +247,8 @@ public class Database {
         insertCallBackStatement.executeUpdate();
     }
 
-    public void removeCallBack(Integer idCallBack) throws SQLException {
-        removeCallBackStatement.setInt(1, idCallBack);
+    public void removeCallBack(String userName) throws SQLException {
+        removeCallBackStatement.setString(1, userName);
         removeCallBackStatement.executeUpdate();
     }
 
