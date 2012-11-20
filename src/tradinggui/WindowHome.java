@@ -47,7 +47,18 @@ public class WindowHome extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             Logger.getLogger(WindowHome.class.getName()).log(Level.SEVERE, null, ex);
         }
-        clientNameLabel.setText(((TraderImpl) client).getName());   
+        clientNameLabel.setText(((TraderImpl) client).getName());
+        try {
+            numberSoldItem.setText(Integer.toString(server.getNumberSoldItem(
+                        ((TraderImpl) client).getName())));
+            
+            numberBoughtItem.setText(Integer.toString(server.getNumberBoughtItem(
+                        ((TraderImpl) client).getName())));
+        } catch (RemoteException ex) {
+            Logger.getLogger(WindowHome.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(WindowHome.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 

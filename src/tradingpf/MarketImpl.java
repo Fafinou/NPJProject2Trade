@@ -128,6 +128,19 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     public synchronized void logout(String name) throws RemoteException, SQLException {
         database.logoutUser(name);
     }
+    
+    @Override
+    public synchronized Integer getNumberSoldItem(String name) throws RemoteException, SQLException {
+        ResultSet res = database.getUser(name);
+        return res.getInt("NumberSold");
+    }
+    
+    
+    @Override
+    public synchronized Integer getNumberBoughtItem(String name) throws RemoteException, SQLException {
+        ResultSet res = database.getUser(name);
+        return res.getInt("NumberBought");
+    }
 
     @Override
     public synchronized void unregister(String name) throws RemoteException {

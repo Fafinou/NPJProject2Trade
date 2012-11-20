@@ -48,6 +48,10 @@ public interface MarketItf extends Remote {
     
     public void logout(String name) throws RemoteException, SQLException ;
     
+    public Integer getNumberSoldItem(String name) throws RemoteException, SQLException;
+    
+    public Integer getNumberBoughtItem(String name) throws RemoteException, SQLException;
+    
     /**
      * Unregisters the client from the market. Client must be registered
      * @param name Name of the client soon to be unregistered
