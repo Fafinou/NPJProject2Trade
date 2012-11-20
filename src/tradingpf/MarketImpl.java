@@ -225,34 +225,14 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
     @Override
     public synchronized void wish(TraderItf follower, String followerName, String itemName, Integer itemPrice) throws RemoteException {
-        //database.        if (wishFound(toAdd))
-        /*{
-            follower.notifyAvailable(itemName);
-        }*/
-    }
-
-    /*
-     * renvoi si le client est enregistré ou pas public boolean register(String
-     * name) {
-     *
-     * }
-     */
-    /*
-     * public Iterator<Item> getItemList() { throw new
-     * UnsupportedOperationException("Not supported yet."); }
-     */
-    private boolean wishFound(Wish wish) {
-        for (Iterator<Item> it = itemList.iterator(); it.hasNext();) {
-            Item item = it.next();
-            if (item.getName().equals(wish.getObjectName())) {
-                if (item.getPrice() <= wish.getObjectPrice()) {
-                    return true;
-                }
-            }
-
+        /* Add the followed item*/
+        try {
+            database.insertFollowed(itemName, itemPrice, followerName);
+        } catch (SQLException ex) {
+            Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
     }
+
 
     private void lookupFollower(Item item) throws RemoteException {
         for (Iterator<Wish> it = wishesList.iterator(); it.hasNext();) {

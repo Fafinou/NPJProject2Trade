@@ -34,6 +34,8 @@ public class Database {
     private PreparedStatement listCallBackStatement;
     private PreparedStatement getItemStatement;
     private PreparedStatement getUserToNotifyStatement;
+    private PreparedStatement insertFollowedStatement;
+    private PreparedStatement insertFollowingStatement;
 
     private void createDatabase() throws SQLException, ClassNotFoundException {
         getConnection();
@@ -169,6 +171,10 @@ public class Database {
         getUserToNotifyStatement =
                 conn.prepareStatement("SELECT Follower FROM Following WHERE Item IN "
                 + "(SELECT Id_Item FROM FollowedItem WHERE Name=? AND PrixMax>=?)");
+        insertFollowedStatement = 
+                conn.prepareStatement("INSERT INTO FollowedItem VALUES (? ,?)"); 
+        insertFollowingStatement =
+                conn.prepareStatement("INSERT INTO Following VALUES (?,?)");
     }
 
     public void insertUser(String userName, String password) throws SQLException {
@@ -299,4 +305,12 @@ public class Database {
         System.out.println();
         System.out.println("Table dropped, " + NoOfAffectedRows + " row(s) affected");
     }
+    
+    public void insertFollowed(String itemName, Integer priceMax, String userName) throws SQLException{
+        insertFollowedStatement.setString(1, itemName);
+        insertFollowedStatement.setInt(2, priceMax); 
+        insertFollowedStatement.executeUpdate();
+        insertFollowingStatement.setString(1, itemName); 
+        insertFollowingStatement.setString(2, userName); 
+        insertFollowingStatement.executeUpdate();   }
 }
