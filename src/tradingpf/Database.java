@@ -18,18 +18,18 @@ public class Database {
     
     private Connection conn;
     private Statement statement;
-    private PreparedStatement insertUser;
-    private PreparedStatement removeUser;
-    private PreparedStatement getUser;
-    private PreparedStatement loginUser;
-    private PreparedStatement logoutUser;
-    private PreparedStatement updateSoldItem;
-    private PreparedStatement updateBoughtItem;
-    private PreparedStatement insertItem;
-    private PreparedStatement listItem;
-    private PreparedStatement removeItem;
-    private PreparedStatement insertCallBack;
-    private PreparedStatement removeCallBack;
+    private PreparedStatement insertUserStatement;
+    private PreparedStatement removeUserStatement;
+    private PreparedStatement getUserStatement;
+    private PreparedStatement loginUserStatement;
+    private PreparedStatement logoutUserStatement;
+    private PreparedStatement updateSoldItemStatement;
+    private PreparedStatement updateBoughtItemStatement;
+    private PreparedStatement insertItemStatement;
+    private PreparedStatement listItemStatement;
+    private PreparedStatement removeItemStatement;
+    private PreparedStatement insertCallBackStatement;
+    private PreparedStatement removeCallBackStatement;
     
     
     
@@ -40,6 +40,7 @@ public class Database {
             createCallBack();
             createFollowedItem();
             createFollowing();
+            initOperations();
         }
      
         private void getConnection() throws SQLException, ClassNotFoundException{          
@@ -103,27 +104,53 @@ public class Database {
             statement.executeUpdate(Request);   
         }
         
-        public void insertUser(String userName, String Password){
+        private void initOperations() throws SQLException {
+            insertUserStatement = conn.prepareStatement("INSERT INTO User " 
+                    + "                                 VALUES (?,?,0,0,true)");
+            removeUserStatement= conn.prepareStatement("DELETE FROM User "
+                    + "                                 WHERE Name = ?");
+            getUserStatement = conn.prepareStatement("SELECT * FROM User "
+                    + "                                 WHERE Name= ?");
+            loginUserStatement = conn.prepareStatement("UPDATE User "
+                    + "                                 SET Log=true "
+                    + "                                 WHERE Name = ?");
+            logoutUserStatement = conn.prepareStatement("UPDATE User "
+                    + "                                 SET Log=false "
+                    + "                                 WHERE Name = ?");
+            updateSoldItemStatement = conn.prepareStatement("UPDATE User "
+                    + "                                     SET NumberSold = NumberSold + 1 " 
+                    + "                                     WHERE Name = ?");
+            updateBoughtItemStatement = conn.prepareStatement("");
+            insertItemStatement = conn.prepareStatement("");
+            listItemStatement = conn.prepareStatement("");
+            removeItemStatement = conn.prepareStatement("");
+            insertCallBackStatement = conn.prepareStatement("");
+            removeCallBackStatement = conn.prepareStatement("");
         }
         
-        public void removeUser(){
-        
+        public void insertUser(String userName, String password) throws SQLException{
+            insertUserStatement.setString(1, userName);  
+            insertUserStatement.setString(2, password); 
         }
         
-        public void getUser(){
-            
+        public void removeUser(String userName)throws SQLException{
+            removeUserStatement.setString(1, userName);
         }
         
-        public void loginUser(){
-            
+        public void getUser(String userName) throws SQLException{
+            getUserStatement.setString(1, userName);  
         }
         
-        public void logoutUser(){
-            
+        public void loginUser(String userName) throws SQLException{
+            loginUserStatement.setString(1, userName);  
         }
         
-        public void updateSoldItem(){
-            
+        public void logoutUser(String userName) throws SQLException{
+            logoutUserStatement.setString(1, userName); 
+        }
+        
+        public void updateSoldItem(String userName) throws SQLException{
+            updateSoldItemStatement.setString(1, userName); 
         }
     
     
@@ -131,6 +158,9 @@ public class Database {
     
     
     private PreparedStatement updateBoughtItem;
+    public void updateBoughtItem(String UserName) throws Exception{
+        
+    }
     private PreparedStatement insertItem;
     private PreparedStatement listItem;
     private PreparedStatement removeItem;
