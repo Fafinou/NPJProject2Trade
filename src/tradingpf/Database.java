@@ -7,6 +7,7 @@ package tradingpf;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -30,6 +31,7 @@ public class Database {
     private PreparedStatement removeItemStatement;
     private PreparedStatement insertCallBackStatement;
     private PreparedStatement removeCallBackStatement;
+    private PreparedStatement listCallBackStatement;
     
     
     
@@ -110,12 +112,22 @@ public class Database {
             loginUserStatement = conn.prepareStatement("");
             logoutUserStatement = conn.prepareStatement("");
             updateSoldItemStatement = conn.prepareStatement("");
-            updateBoughtItemStatement = conn.prepareStatement("");
-            insertItemStatement = conn.prepareStatement("");
-            listItemStatement = conn.prepareStatement("");
-            removeItemStatement = conn.prepareStatement("");
-            insertCallBackStatement = conn.prepareStatement("");
-            removeCallBackStatement = conn.prepareStatement("");
+            
+            updateBoughtItemStatement = 
+                                    conn.prepareStatement(
+                                           "UPDATE User "
+                                         + "SET NumberBought = NumberBought + 1 "
+                                         + "WHERE Name=?");
+            insertItemStatement = conn.prepareStatement("INSERT INTO Item"
+                                                        + " VALUES (?,?,?,?)");
+            listItemStatement = conn.prepareStatement("SELECT * FROM Item");
+            removeItemStatement = conn.prepareStatement("DELETE FROM Item "
+                                                        + "WHERE Id_Item=?");
+            insertCallBackStatement = conn.prepareStatement("INSERT INTO CallBack"
+                                                        + " VALUES (?,?,?)");
+            removeCallBackStatement = conn.prepareStatement("DELETE FROM CallBack"
+                    + " WHERE Id_CallBack=?");
+            listCallBackStatement = conn.prepareStatement("");
         }
         
         public void insertUser(){
@@ -132,13 +144,53 @@ public class Database {
     
     
     
-    private PreparedStatement updateBoughtItem;
     public void updateBoughtItem(String UserName) throws Exception{
+        updateBoughtItemStatement.setString(1, UserName);
+        updateBoughtItemStatement.executeUpdate();
+    }
+    
+    public void insertItem(String itemName,
+            Integer itemPrice, 
+            Integer amount, 
+            String sellerName) throws Exception{
+        
+        insertItemStatement.setString(1, itemName);
+        insertItemStatement.setInt(2, itemPrice);
+        insertItemStatement.setInt(3, amount);
+        insertItemStatement.setString(4, sellerName);
+        insertItemStatement.executeUpdate();
         
     }
-    private PreparedStatement insertItem;
-    private PreparedStatement listItem;
-    private PreparedStatement removeItem;
-    private PreparedStatement insertCallBack;
-    private PreparedStatement removeCallBack;
+    
+    public ResultSet listItem() throws Exception {
+        ResultSet to_return = null;
+        to_return = listItemStatement.executeQuery();
+        return to_return;
+    }
+
+    public void removeItem(Integer itemId) throws Exception {
+        removeItemStatement.setInt(1, itemId);
+        removeItemStatement.executeUpdate();
+    }
+
+    public void insertCallBack(Boolean isSold,
+                    String subjectName,
+                    String itemName) throws Exception{
+        insertCallBackStatement.setBoolean(1, isSold);
+        insertCallBackStatement.setString(2, itemName);
+        insertCallBackStatement.setString(3, subjectName);
+        insertCallBackStatement.executeUpdate();
+    }
+
+    public void removeCallBack(Integer idCallBack) throws Exception{
+        removeCallBackStatement.setInt(1, idCallBack);
+        removeCallBackStatement.executeUpdate();
+    }
+   
+    public ResultSet listCallBack(String userName) throws Exception {
+        ResultSet to_return = null;
+        listCallBackStatement.setString(1, userName);
+        to_return = listCallBackStatement.executeQuery();
+        return to_return;
+    }
 }
