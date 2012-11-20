@@ -6,6 +6,9 @@ package tradinggui;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import se.kth.id2212.bankrmi.Bank;
 import se.kth.id2212.bankrmi.BankImpl;
 import tradingpf.MarketImpl;
@@ -101,7 +104,7 @@ public class WindowConfig extends javax.swing.JFrame {
         //initAll();
         initBank();
         initServer();
-        WindowAccount nextWindow = new WindowAccount(bank, server);
+        WindowRegister nextWindow = new WindowRegister(bank, server);
         nextWindow.setVisible(true);
         this.setVisible(false);
         this.dispose();
@@ -202,6 +205,8 @@ public class WindowConfig extends javax.swing.JFrame {
             newBank = new BankImpl(bankName);
         } catch (RemoteException ex) {
             System.out.println("the runtime failed: "+ ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(WindowConfig.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             java.rmi.Naming.rebind(bankName, newBank);

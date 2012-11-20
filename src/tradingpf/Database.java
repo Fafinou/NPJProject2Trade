@@ -46,7 +46,7 @@ public class Database {
 
     private void getConnection() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
-        conn = DriverManager.getConnection("jdbc:mysql://localhost/Market", "id2212","javajava");
+        conn = DriverManager.getConnection("jdbc:mysql://localhost/Market", "id2212", "javajava");
         statement = conn.createStatement();
     }
 
@@ -131,6 +131,7 @@ public class Database {
     private void initOperations() throws SQLException {
 
 
+
         insertUserStatement = conn.prepareStatement("INSERT INTO User "
                 + "                                 VALUES (?,?,0,0,true)");
         removeUserStatement = conn.prepareStatement("DELETE FROM User "
@@ -169,26 +170,32 @@ public class Database {
     public void insertUser(String userName, String password) throws SQLException {
         insertUserStatement.setString(1, userName);
         insertUserStatement.setString(2, password);
+        insertUserStatement.executeUpdate();
     }
 
     public void removeUser(String userName) throws SQLException {
         removeUserStatement.setString(1, userName);
+        removeUserStatement.executeUpdate();
     }
 
-    public void getUser(String userName) throws SQLException {
+    public ResultSet getUser(String userName) throws SQLException {
         getUserStatement.setString(1, userName);
+        return getUserStatement.executeQuery();
     }
 
     public void loginUser(String userName) throws SQLException {
         loginUserStatement.setString(1, userName);
+        loginUserStatement.executeUpdate();
     }
 
     public void logoutUser(String userName) throws SQLException {
         logoutUserStatement.setString(1, userName);
+        logoutUserStatement.executeUpdate();
     }
 
     public void updateSoldItem(String userName) throws SQLException {
         updateSoldItemStatement.setString(1, userName);
+        updateSoldItemStatement.executeUpdate();
     }
 
     public void updateBoughtItem(String UserName) throws Exception {
@@ -240,7 +247,7 @@ public class Database {
         to_return = listCallBackStatement.executeQuery();
         return to_return;
     }
-    
+
     public ResultSet getItem(Integer itemId) throws Exception {
         ResultSet to_return = null;
         getItemStatement.setInt(1, itemId);
@@ -277,5 +284,4 @@ public class Database {
         System.out.println();
         System.out.println("Table dropped, " + NoOfAffectedRows + " row(s) affected");
     }
-    
 }
