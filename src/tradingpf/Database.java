@@ -18,18 +18,18 @@ public class Database {
     
     private Connection conn;
     private Statement statement;
-    private PreparedStatement insertUser;
-    private PreparedStatement removeUser;
-    private PreparedStatement getUser;
-    private PreparedStatement loginUser;
-    private PreparedStatement logoutUser;
-    private PreparedStatement updateSoldItem;
-    private PreparedStatement updateBoughtItem;
-    private PreparedStatement insertItem;
-    private PreparedStatement listItem;
-    private PreparedStatement removeItem;
-    private PreparedStatement insertCallBack;
-    private PreparedStatement removeCallBack;
+    private PreparedStatement insertUserStatement;
+    private PreparedStatement removeUserStatement;
+    private PreparedStatement getUserStatement;
+    private PreparedStatement loginUserStatement;
+    private PreparedStatement logoutUserStatement;
+    private PreparedStatement updateSoldItemStatement;
+    private PreparedStatement updateBoughtItemStatement;
+    private PreparedStatement insertItemStatement;
+    private PreparedStatement listItemStatement;
+    private PreparedStatement removeItemStatement;
+    private PreparedStatement insertCallBackStatement;
+    private PreparedStatement removeCallBackStatement;
     
     
     
@@ -103,6 +103,20 @@ public class Database {
             statement.executeUpdate(Request);   
         }
         
+        private void initOperations() throws Exception {
+            removeUserStatement= conn.prepareStatement("");
+            getUserStatement = conn.prepareStatement("");
+            loginUserStatement = conn.prepareStatement("");
+            logoutUserStatement = conn.prepareStatement("");
+            updateSoldItemStatement = conn.prepareStatement("");
+            updateBoughtItemStatement = conn.prepareStatement("");
+            insertItemStatement = conn.prepareStatement("");
+            listItemStatement = conn.prepareStatement("");
+            removeItemStatement = conn.prepareStatement("");
+            insertCallBackStatement = conn.prepareStatement("");
+            removeCallBackStatement = conn.prepareStatement("");
+        }
+        
         public void insertUser(){
             throws UnsupportedOperationException;
         }
@@ -118,6 +132,9 @@ public class Database {
     
     
     private PreparedStatement updateBoughtItem;
+    public void updateBoughtItem(String UserName) throws Exception{
+        
+    }
     private PreparedStatement insertItem;
     private PreparedStatement listItem;
     private PreparedStatement removeItem;
