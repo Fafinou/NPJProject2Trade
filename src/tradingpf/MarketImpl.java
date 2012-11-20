@@ -193,9 +193,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
     @Override
     public synchronized void wish(TraderItf follower, String followerName, String itemName, Integer itemPrice) throws RemoteException {
-        Wish toAdd = new Wish(follower, followerName, itemName, itemPrice);
-        this.wishesList.add(toAdd);
-        if (wishFound(toAdd)) {
+        database.        if (wishFound(toAdd)) {
             follower.notifyAvailable(itemName);
         }
     }
