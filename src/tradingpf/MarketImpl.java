@@ -94,7 +94,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
         } catch (Exception ex) {
             Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        while (!callBack.next()) {
+        while (callBack.next()) {
             String clientName = callBack.getString("UserName");
             String itemName = callBack.getString("ItemName");
             TraderItf client = null;
@@ -118,9 +118,6 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
                  * Type = available
                  */
                 try {
-                    /*
-                     * Type = sold
-                     */
                     client.notifyAvailable(itemName);
                 } catch (RemoteException ex) {
                     Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
