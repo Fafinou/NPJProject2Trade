@@ -178,42 +178,95 @@ public class Database {
                 conn.prepareStatement("INSERT INTO Following (ItemName,PrixMax,Follower) VALUES (?,?,?)");
     }
 
+    /**
+     * Insert a user in database
+     * 
+     * @param userName : the name of the user
+     * @param password : the password of the user
+     * @throws SQLException 
+     */
     public void insertUser(String userName, String password) throws SQLException {
         insertUserStatement.setString(1, userName);
         insertUserStatement.setString(2, password);
         insertUserStatement.executeUpdate();
     }
 
+    /**
+     * remove a user in the database
+     * 
+     * @param userName : the name of the user to remove
+     * @throws SQLException 
+     */
     public void removeUser(String userName) throws SQLException {
         removeUserStatement.setString(1, userName);
         removeUserStatement.executeUpdate();
     }
 
+    /**
+     * Get a the user who his name is userName
+     * 
+     * @param userName : the name of the user
+     * @return the user
+     * @throws SQLException 
+     */
     public ResultSet getUser(String userName) throws SQLException {
         getUserStatement.setString(1, userName);
         return getUserStatement.executeQuery();
     }
 
+    /**
+     * log in the user
+     * 
+     * @param userName : the name of the user
+     * @throws SQLException 
+     */
     public void loginUser(String userName) throws SQLException {
         loginUserStatement.setString(1, userName);
         loginUserStatement.executeUpdate();
     }
 
+    /**
+     * log out the user
+     * 
+     * @param userName : the name of the user
+     * @throws SQLException 
+     */
     public void logoutUser(String userName) throws SQLException {
         logoutUserStatement.setString(1, userName);
         logoutUserStatement.executeUpdate();
     }
 
+    /**
+     * Increment the sold activity of the user
+     * 
+     * @param userName : the name of the user
+     * @throws SQLException 
+     */
     public void updateSoldItem(String userName) throws SQLException {
         updateSoldItemStatement.setString(1, userName);
         updateSoldItemStatement.executeUpdate();
     }
 
+    /**
+     * Increment the bought activity of the user
+     * 
+     * @param UserName : the name of the user
+     * @throws SQLException 
+     */
     public void updateBoughtItem(String UserName) throws SQLException {
         updateBoughtItemStatement.setString(1, UserName);
         updateBoughtItemStatement.executeUpdate();
     }
 
+    /**
+     * Insert an item in the database
+     * 
+     * @param itemName : the name of the item
+     * @param itemPrice : the price of the item
+     * @param amount : the quantity of the item
+     * @param sellerName : the name of the seller
+     * @throws SQLException 
+     */
     public void insertItem(String itemName,
             Integer itemPrice,
             Integer amount,
@@ -227,17 +280,37 @@ public class Database {
 
     }
 
+    /**
+     * List the item in the database
+     * 
+     * @return all items in the database
+     * @throws SQLException 
+     */
     public ResultSet listItem() throws SQLException {
-        ResultSet to_return = null;
-        to_return = listItemStatement.executeQuery();
+        ResultSet to_return = listItemStatement.executeQuery();
         return to_return;
     }
 
+    /**
+     * remove an item in the database
+     * 
+     * @param itemId : the Id of the item to remove
+     * @throws SQLException 
+     */
     public void removeItem(Integer itemId) throws SQLException {
         removeItemStatement.setInt(1, itemId);
         removeItemStatement.executeUpdate();
     }
 
+    /**
+     * Insert a callback in the database
+     * 
+     * @param isSold : true if the callback corresponds to a sold notify and
+     * false if the callback corresponds to an available notify
+     * @param subjectName : the name of the user
+     * @param itemName : the name of the item
+     * @throws SQLException 
+     */
     public void insertCallBack(Boolean isSold,
             String subjectName,
             String itemName) throws SQLException {
@@ -247,33 +320,59 @@ public class Database {
         insertCallBackStatement.executeUpdate();
     }
 
+    /**
+     * Remove a callback in the database
+     * 
+     * @param idCallBack : id of the callback
+     * @throws SQLException 
+     */
     public void removeCallBack(Integer idCallBack) throws SQLException {
         removeCallBackStatement.setInt(1, idCallBack);
         removeCallBackStatement.executeUpdate();
     }
 
+    /**
+     * List the callbacks of the database
+     * 
+     * @param userName : the name of the user
+     * @return all callbacks which concern the user userName
+     * @throws SQLException 
+     */
     public ResultSet listCallBack(String userName) throws SQLException {
-        ResultSet to_return = null;
         listCallBackStatement.setString(1, userName);
-        to_return = listCallBackStatement.executeQuery();
+        ResultSet to_return = listCallBackStatement.executeQuery();
         return to_return;
     }
 
+    /**
+     * Get an item
+     * 
+     * @param itemId : id of the item
+     * @return the item which corresponds to itemId
+     * @throws SQLException 
+     */
     public ResultSet getItem(Integer itemId) throws SQLException {
-        ResultSet to_return = null;
         getItemStatement.setInt(1, itemId);
-        to_return = getItemStatement.executeQuery();
+        ResultSet to_return = getItemStatement.executeQuery();
         return to_return;
     }
 
+    /**
+     * Get the users who want to be notified when an item 
+     * with the name itemName and a price itemPrice is bought
+     * 
+     * @param itemName : name of the item
+     * @param itemPrice : price of the item
+     * @return users to notify
+     * @throws SQLException 
+     */
     public ResultSet getUserToNotify(
             String itemName,
             Integer itemPrice)
             throws SQLException {
-        ResultSet to_return = null;
         getUserToNotifyStatement.setString(1, itemName);
         getUserToNotifyStatement.setInt(2, itemPrice);
-        to_return = getUserToNotifyStatement.executeQuery();
+        ResultSet to_return = getUserToNotifyStatement.executeQuery();
         return to_return;
     }
 
@@ -335,6 +434,14 @@ public class Database {
         }
     }
 
+    /**
+     * Insert a followed item in the database
+     * 
+     * @param itemName : the name of the followed item
+     * @param priceMax :the price max
+     * @param userName : the name of the follower
+     * @throws SQLException 
+     */
     public void insertFollowed(String itemName, Integer priceMax, String userName) throws SQLException {
         insertFollowedStatement.setString(1, itemName);
         insertFollowedStatement.setInt(2, priceMax);
