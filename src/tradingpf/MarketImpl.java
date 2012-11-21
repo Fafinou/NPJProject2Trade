@@ -148,8 +148,12 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
 
     @Override
     public synchronized void unregister(String name) throws RemoteException {
+
+        /*
         registeredClients.remove(name);
         Wish wish = null;
+
+
         for (int i = 0; i < wishesList.size(); i++) {
             wish = wishesList.get(i);
             if (name.equals(wish.getFollowerName())) {
@@ -164,8 +168,16 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
                 itemList.remove(itemList.indexOf(item));
             }
         }
-
-        //database.removeUser();
+        */
+        bank.deleteAccount(name);
+        try {
+            database.removeCallBack(name);
+            database.removeFollowingByUser(name);
+            database.removeItemByUser(name);
+            database.removeUser(name);
+        } catch (SQLException ex) {
+            Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

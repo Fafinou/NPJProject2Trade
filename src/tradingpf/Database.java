@@ -32,6 +32,7 @@ public class Database {
     private PreparedStatement insertItemStatement;
     private PreparedStatement listItemStatement;
     private PreparedStatement removeItemStatement;
+    private PreparedStatement removeItemByUserStatement;
     private PreparedStatement insertCallBackStatement;
     private PreparedStatement removeCallBackStatement;
     private PreparedStatement listCallBackStatement;
@@ -39,6 +40,8 @@ public class Database {
     private PreparedStatement getUserToNotifyStatement;
     private PreparedStatement insertFollowedStatement;
     private PreparedStatement insertFollowingStatement;
+    private PreparedStatement removeFollowingByUserStatement;
+    private PreparedStatement decrementAmountItemStatement;
 
     private void createDatabase() throws SQLException, ClassNotFoundException {
         getConnection();
@@ -176,6 +179,12 @@ public class Database {
                 conn.prepareStatement("INSERT INTO FollowedItem (Name, PrixMax) VALUES (? ,?)");
         insertFollowingStatement =
                 conn.prepareStatement("INSERT INTO Following (ItemName,PrixMax,Follower) VALUES (?,?,?)");
+        removeItemByUserStatement = 
+                conn.prepareStatement("DELETE FROM Item WHERE Seller=?");
+        removeFollowingByUserStatement=
+                conn.prepareStatement("DELETE FROM Following WHERE Follower=?");
+        decrementAmountItemStatement = 
+                conn.prepareStatement("UPDATE Item SET Amount = Amount - 1 WHERE Id_Item=?");
     }
 
     /**
@@ -212,6 +221,26 @@ public class Database {
     public ResultSet getUser(String userName) throws SQLException {
         getUserStatement.setString(1, userName);
         return getUserStatement.executeQuery();
+    }
+    
+    /**
+     * Removes all items sold by a specified user
+     * @param userName targeted user
+     * @throws SQLException 
+     */
+    public void removeItemByUser(String userName) throws SQLException {
+        removeItemByUserStatement.setString(1, userName);
+        removeItemByUserStatement.executeUpdate();
+    }
+    
+    /**
+     * Removes the wishes of a given user
+     * @param userName targeted user
+     * @throws SQLException 
+     */
+    public void removeFollowingByUser(String userName) throws SQLException {
+        removeFollowingByUserStatement.setString(1, userName);
+        removeFollowingByUserStatement.executeUpdate();
     }
 
     /**
@@ -324,7 +353,7 @@ public class Database {
     /**
      * Remove a callback in the database
      * 
-     * @param idCallBack : id of the callback
+     * @param userName user targeted
      * @throws SQLException 
      */
     public void removeCallBack(String userName) throws SQLException {
@@ -343,6 +372,23 @@ public class Database {
         listCallBackStatement.setString(1, userName);
         ResultSet to_return = listCallBackStatement.executeQuery();
         return to_return;
+    }
+    
+    public void decrementAmountItem(Integer idItem) throws SQLException {
+        decrementAmountItemStatement.setInt(1, idItem);
+        decrementAmountItemStatement.executeUpdate();
+    }
+    
+    public void buyAnItem(Integer idItem) throws SQLException {
+        ResultSet result = this.getItem(idItem);
+        if(result.next()){
+            Integer nbItem = result.getInt("Amount");
+            if (nbItem == 1){
+                this.removeItem(idItem);
+            }else{
+                decrementAmountItem(idItem);
+            }
+        }
     }
 
     /**
