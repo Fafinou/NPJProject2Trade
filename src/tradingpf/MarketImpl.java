@@ -152,25 +152,17 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
     public synchronized void unregister(String name) throws RemoteException {
 
         /*
-        registeredClients.remove(name);
-        Wish wish = null;
-
-
-        for (int i = 0; i < wishesList.size(); i++) {
-            wish = wishesList.get(i);
-            if (name.equals(wish.getFollowerName())) {
-                wishesList.remove(wishesList.indexOf(wish));
-            }
-        }
-
-        Item item = null;
-        for (int i = 0; i < itemList.size(); i++) {
-            item = itemList.get(i);
-            if (item.getSellerName().equals(name)) {
-                itemList.remove(itemList.indexOf(item));
-            }
-        }
-        */
+         * registeredClients.remove(name); Wish wish = null;
+         *
+         *
+         * for (int i = 0; i < wishesList.size(); i++) { wish =
+         * wishesList.get(i); if (name.equals(wish.getFollowerName())) {
+         * wishesList.remove(wishesList.indexOf(wish)); } }
+         *
+         * Item item = null; for (int i = 0; i < itemList.size(); i++) { item =
+         * itemList.get(i); if (item.getSellerName().equals(name)) {
+         * itemList.remove(itemList.indexOf(item)); } }
+         */
         bank.deleteAccount(name);
         try {
             database.removeCallBack(name);
@@ -202,6 +194,7 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
          * Payment
          */
         ResultSet result = null;
+        ResultSet infoClient = null;
         Account clientAccount = null;
         Account sellerAccount = null;
         String sellerName = null;
@@ -224,7 +217,30 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
         }
         if (clientAccount.getBalance() < itemPrice) {
             //the client do not have enough money.
-            registeredClients.get(clientName).notifyNotEnoughMoney();
+            try {
+                //TODO
+                infoClient = database.getUser(clientName);
+                Boolean log = false;
+                if(infoClient.next()){
+                    log = infoClient.getBoolean("Log");
+                }
+                
+                if (!infoClient.getBoolean("Log")) {
+                    database.insertCallBack(true, sellerName, itemName);
+                } else {
+                    TraderItf client = null;
+                    try {
+                        client = (TraderItf) Naming.lookup(sellerName);
+                    } catch (NotBoundException ex) {
+                        Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    client.notifyNotEnoughMoney();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             try {
                 clientAccount.withdraw(itemPrice);
@@ -236,18 +252,18 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
                 /*
                  * Remove item of itemList
                  */
-                 database.removeItem(itemId);
+                database.buyAnItem(itemId);
             } catch (SQLException ex) {
-                 Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             /*
              * Notify to the seller
              */
-             ResultSet sel;
+            ResultSet sel;
             try {
                 sel = database.getUser(sellerName);
-                sel.next(); 
+                sel.next();
                 if (!sel.getBoolean("Log")) {
                     database.insertCallBack(true, sellerName, itemName);
                 } else {
@@ -262,11 +278,12 @@ public class MarketImpl extends UnicastRemoteObject implements MarketItf {
             } catch (NotBoundException ex) {
                 Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
             } catch (MalformedURLException ex) {
-                 Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MarketImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         }
     }
+    
 
     @Override
     public void inspect() throws RemoteException {
